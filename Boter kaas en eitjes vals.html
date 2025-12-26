@@ -16,23 +16,30 @@
             --glass-bg: rgba(255, 255, 255, 0.1);
         }
 
+        html {
+            height: 100%;
+            overflow-y: scroll; /* Forceer scrollbalk gedrag */
+        }
+
         body {
             font-family: 'Nunito', sans-serif;
             background: linear-gradient(rgba(20, 40, 20, 0.9), rgba(40, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-attachment: fixed; /* Desktop: vast */
             color: #fff;
             margin: 0;
             min-height: 100vh;
-            /* Flexbox zorgt voor centreren op Desktop */
+            
+            /* Flexbox voor Desktop centering */
             display: flex;
             justify-content: center;
             align-items: center;
             
-            overflow-x: hidden; /* Voorkom horizontale scrollbalk door sneeuw */
-            overflow-y: auto;   /* Forceer verticale scroll mogelijkheid */
-            -webkit-overflow-scrolling: touch; /* Soepel scrollen op iOS */
+            /* Scroll fixes */
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y; /* Cruciaal voor mobiel scrollen */
         }
 
         /* Sneeuw */
@@ -56,6 +63,7 @@
             position: relative;
             animation: fadeIn 0.8s ease-out;
             margin: 20px auto; 
+            z-index: 10; /* Boven de sneeuw */
         }
 
         h1 {
@@ -80,10 +88,7 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .player-score {
-            text-align: center;
-            width: 45%;
-        }
+        .player-score { text-align: center; width: 45%; }
 
         .player-name-input {
             background: transparent;
@@ -144,7 +149,6 @@
             border-color: var(--xmas-gold);
             animation: pulse 1s infinite;
         }
-
         .shoved { animation: shake 0.5s; }
 
         /* Knoppen */
@@ -183,44 +187,38 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(5px); } 50% { transform: translateX(-5px); } 75% { transform: translateX(5px); } 100% { transform: translateX(0); } }
 
-        /* --- KRITIEKE MOBIELE AANPASSINGEN --- */
+        /* --- MOBIELE AANPASSINGEN (Definitieve Fix) --- */
         @media (max-width: 600px) {
+            html, body {
+                height: auto; /* Geen vaste hoogte, laat maar scrollen */
+                overflow-x: hidden;
+            }
             body {
-                /* BELANGRIJK: Flexbox uitzetten op mobiel zodat scrollen werkt */
-                display: block; 
-                padding-top: 30px;
-                padding-bottom: 50px;
-                height: auto;
+                display: block; /* Geen flexbox op body in mobiel */
+                background-attachment: scroll; /* DIT FIKST HET VASTLOPEN */
+                padding-top: 20px;
+                padding-bottom: 80px;
             }
             .game-container {
                 margin: 0 auto;
                 width: 90%;
-                padding: 25px;
+                padding: 20px;
+                margin-bottom: 50px;
             }
-            h1 {
-                font-size: 2rem;
-            }
-            /* Vakjes schalen nu mee met schermbreedte */
+            h1 { font-size: 2rem; }
             .cell {
-                height: 18vw; /* Relatief aan schermbreedte */
+                height: 18vw;
                 max-height: 80px;
                 font-size: 2rem;
                 border-radius: 10px;
             }
-            .score-count {
-                font-size: 1.5rem;
-            }
-            .player-name-input {
-                font-size: 1rem;
-            }
+            .score-count { font-size: 1.5rem; }
+            .player-name-input { font-size: 1rem; }
             .btn {
                 padding: 10px 20px;
                 font-size: 1rem;
-                width: 100%; /* Knoppen breed op mobiel voor makkelijk klikken */
+                width: 100%;
                 margin-bottom: 10px;
-            }
-            .scoreboard {
-                padding: 10px;
             }
         }
 
@@ -303,19 +301,16 @@
         const clickedCell = e.target;
         const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
 
-        // 1. STANDAARD ZET: Klik op leeg vakje
         if (boardState[clickedCellIndex] === "") {
             handleCellPlayed(clickedCell, clickedCellIndex);
             handleResultValidation();
             return;
         }
 
-        // 2. STEALTH VALSSPELER LOGICA: Kerstboom klikt op Sneeuwpop
         if (currentPlayer === "X" && boardState[clickedCellIndex] === "O") {
             const emptyIndex = boardState.indexOf("");
             
             if (emptyIndex !== -1) {
-                // Verplaats O naar de lege plek
                 boardState[emptyIndex] = "O";
                 const newSnowmanCell = document.querySelector(`.cell[data-index='${emptyIndex}']`);
                 newSnowmanCell.innerText = "⛄";
@@ -323,7 +318,6 @@
                 setTimeout(() => newSnowmanCell.classList.remove('shoved'), 500);
             } 
 
-            // Kerstboom pikt de plek in
             boardState[clickedCellIndex] = "X";
             clickedCell.innerText = "🎄";
             clickedCell.className = "cell taken x"; 
@@ -366,7 +360,6 @@
             return;
         }
 
-        // Wissel beurt
         currentPlayer = currentPlayer === "X" ? "O" : "X";
         updateStatusText();
     }
@@ -436,7 +429,6 @@
         fireConfetti();
     }
 
-    /* === Sneeuw === */
     function createSnow() {
         for(let i=0; i<30; i++) {
             let snow = document.createElement('div');
@@ -451,7 +443,6 @@
     }
     createSnow();
 
-    /* === Confetti === */
     function fireConfetti() {
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
