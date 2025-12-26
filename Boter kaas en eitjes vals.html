@@ -2,8 +2,8 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kerst Boter Kaas & Eieren</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kerst Boter Kaas & Eieren (Special)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -21,13 +21,15 @@
             background: linear-gradient(rgba(20, 40, 20, 0.9), rgba(40, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed; /* Achtergrond vastzetten */
             color: #fff;
             margin: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            /* overflow: hidden; <-- WEGGEHAALD */
+            overflow-x: hidden; /* Alleen horizontaal scrollen voorkomen */
         }
 
         /* Sneeuw */
@@ -50,6 +52,7 @@
             width: 90%;
             position: relative;
             animation: fadeIn 0.8s ease-out;
+            margin: 20px auto; /* Ruimte voor scrollen */
         }
 
         h1 {
@@ -130,8 +133,6 @@
         /* Alleen hover effect op lege vakjes voor iedereen */
         .cell:hover:not(.taken) { background: rgba(255, 255, 255, 0.2); transform: scale(1.02); }
 
-        /* Visueel: Vakjes die bezet zijn lijken niet klikbaar (standaard cursor) */
-        /* Dit is cruciaal voor de misleiding! */
         .cell.taken { cursor: default; }
         
         .cell.x { color: #2ecc71; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); } 
@@ -158,6 +159,7 @@
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: transform 0.2s;
+            touch-action: manipulation;
         }
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-gold { background: linear-gradient(to bottom, var(--xmas-gold), var(--xmas-gold-dark)); color: #4a3200; }
@@ -180,6 +182,37 @@
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(5px); } 50% { transform: translateX(-5px); } 75% { transform: translateX(5px); } 100% { transform: translateX(0); } }
+
+        /* --- MOBIELE AANPASSINGEN --- */
+        @media (max-width: 600px) {
+            body {
+                align-items: flex-start;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            .game-container {
+                padding: 20px;
+                width: 95%;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .cell {
+                height: 70px;
+                font-size: 2.5rem;
+                border-radius: 10px;
+            }
+            .score-count {
+                font-size: 1.8rem;
+            }
+            .player-name-input {
+                font-size: 1rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
 
     </style>
 </head>
@@ -268,18 +301,15 @@
         }
 
         // 2. STEALTH VALSSPELER LOGICA: Kerstboom klikt op Sneeuwpop
-        // Er is geen visuele feedback, de klik werkt gewoon 'stiekem'.
         if (currentPlayer === "X" && boardState[clickedCellIndex] === "O") {
-            // Vind een leeg plekje voor de sneeuwpop
             const emptyIndex = boardState.indexOf("");
             
-            // Als er plek is, verplaats de sneeuwpop
             if (emptyIndex !== -1) {
                 // Verplaats O naar de lege plek
                 boardState[emptyIndex] = "O";
                 const newSnowmanCell = document.querySelector(`.cell[data-index='${emptyIndex}']`);
                 newSnowmanCell.innerText = "⛄";
-                newSnowmanCell.className = "cell taken o shoved"; // 'shoved' voor animatie
+                newSnowmanCell.className = "cell taken o shoved"; 
                 setTimeout(() => newSnowmanCell.classList.remove('shoved'), 500);
             } 
 
@@ -287,10 +317,6 @@
             boardState[clickedCellIndex] = "X";
             clickedCell.innerText = "🎄";
             clickedCell.className = "cell taken x"; 
-            
-            // Alleen NA de daad laten we even een schrikmomentje zien in de tekst,
-            // of we houden het helemaal stil... laten we het subtiel houden:
-            // "Kerstmagie"
             
             handleResultValidation();
         }
@@ -363,7 +389,6 @@
         const p2 = document.getElementById('p2-name').value || "Sneeuwpop";
         
         statusText.style.color = "#ddd"; 
-        // Geen valsspel tekst meer! Gewoon neutraal.
         statusText.innerText = currentPlayer === "X" ? `🎄 ${p1} is aan de beurt` : `⛄ ${p2} is aan de beurt`;
     }
 

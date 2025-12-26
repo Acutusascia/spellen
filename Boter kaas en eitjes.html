@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kerst Boter Kaas & Eieren</title>
     <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -21,13 +21,15 @@
             background: linear-gradient(rgba(20, 40, 20, 0.85), rgba(40, 10, 10, 0.85)), url('https://images.unsplash.com/photo-1576618148400-f54bed99fcf8?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed; /* Zorgt dat achtergrond blijft staan bij scrollen */
             color: #fff;
             margin: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            /* overflow: hidden;  <-- VERWIJDERD zodat je kunt scrollen */
+            overflow-x: hidden; /* Alleen horizontaal scrollen voorkomen */
         }
 
         /* Sneeuw */
@@ -50,6 +52,8 @@
             width: 90%;
             position: relative;
             animation: fadeIn 0.8s ease-out;
+            /* Zorg voor ruimte op mobiel */
+            margin: 20px auto; 
         }
 
         h1 {
@@ -102,7 +106,7 @@
         .turn-indicator {
             font-size: 1.2rem;
             margin-bottom: 20px;
-            height: 1.5em; /* Voorkom springen */
+            min-height: 1.5em;
             color: #ddd;
         }
 
@@ -116,7 +120,7 @@
 
         .cell {
             background: rgba(255, 255, 255, 0.1);
-            height: 100px;
+            height: 100px; /* Standaard hoogte desktop */
             border-radius: 15px;
             display: flex;
             justify-content: center;
@@ -134,8 +138,8 @@
         }
 
         .cell.taken { cursor: default; }
-        .cell.x { color: #2ecc71; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); } /* Kerstboom kleur */
-        .cell.o { color: #ecf0f1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.4); } /* Sneeuwpop kleur */
+        .cell.x { color: #2ecc71; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); } 
+        .cell.o { color: #ecf0f1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.4); } 
 
         .cell.winning {
             background: rgba(248, 178, 41, 0.3);
@@ -155,6 +159,7 @@
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: transform 0.2s;
+            touch-action: manipulation; /* Betere touch respons */
         }
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-gold { background: linear-gradient(to bottom, var(--xmas-gold), var(--xmas-gold-dark)); color: #4a3200; }
@@ -178,6 +183,37 @@
 
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- MOBIELE AANPASSINGEN --- */
+        @media (max-width: 600px) {
+            body {
+                align-items: flex-start; /* Zorgt dat content bovenaan begint zodat je kunt scrollen */
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+            .game-container {
+                padding: 20px; /* Minder witruimte */
+                width: 95%; /* Breder op mobiel */
+            }
+            h1 {
+                font-size: 2.5rem; /* Kleinere titel */
+            }
+            .cell {
+                height: 70px; /* Kleinere vakjes */
+                font-size: 2.5rem; /* Kleinere icoontjes */
+                border-radius: 10px;
+            }
+            .score-count {
+                font-size: 1.8rem;
+            }
+            .player-name-input {
+                font-size: 1rem;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
 
     </style>
 </head>
