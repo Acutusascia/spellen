@@ -21,15 +21,18 @@
             background: linear-gradient(rgba(20, 40, 20, 0.9), rgba(40, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* Achtergrond vastzetten */
+            background-attachment: fixed;
             color: #fff;
             margin: 0;
             min-height: 100vh;
+            /* Flexbox zorgt voor centreren op Desktop */
             display: flex;
             justify-content: center;
             align-items: center;
-            /* overflow: hidden; <-- WEGGEHAALD */
-            overflow-x: hidden; /* Alleen horizontaal scrollen voorkomen */
+            
+            overflow-x: hidden; /* Voorkom horizontale scrollbalk door sneeuw */
+            overflow-y: auto;   /* Forceer verticale scroll mogelijkheid */
+            -webkit-overflow-scrolling: touch; /* Soepel scrollen op iOS */
         }
 
         /* Sneeuw */
@@ -52,7 +55,7 @@
             width: 90%;
             position: relative;
             animation: fadeIn 0.8s ease-out;
-            margin: 20px auto; /* Ruimte voor scrollen */
+            margin: 20px auto; 
         }
 
         h1 {
@@ -130,9 +133,7 @@
             position: relative;
         }
 
-        /* Alleen hover effect op lege vakjes voor iedereen */
         .cell:hover:not(.taken) { background: rgba(255, 255, 255, 0.2); transform: scale(1.02); }
-
         .cell.taken { cursor: default; }
         
         .cell.x { color: #2ecc71; text-shadow: 0 0 10px rgba(46, 204, 113, 0.4); } 
@@ -144,7 +145,6 @@
             animation: pulse 1s infinite;
         }
 
-        /* Animatie voor verplaatste sneeuwpop */
         .shoved { animation: shake 0.5s; }
 
         /* Knoppen */
@@ -183,27 +183,32 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(5px); } 50% { transform: translateX(-5px); } 75% { transform: translateX(5px); } 100% { transform: translateX(0); } }
 
-        /* --- MOBIELE AANPASSINGEN --- */
+        /* --- KRITIEKE MOBIELE AANPASSINGEN --- */
         @media (max-width: 600px) {
             body {
-                align-items: flex-start;
-                padding-top: 20px;
-                padding-bottom: 20px;
+                /* BELANGRIJK: Flexbox uitzetten op mobiel zodat scrollen werkt */
+                display: block; 
+                padding-top: 30px;
+                padding-bottom: 50px;
+                height: auto;
             }
             .game-container {
-                padding: 20px;
-                width: 95%;
+                margin: 0 auto;
+                width: 90%;
+                padding: 25px;
             }
             h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
+            /* Vakjes schalen nu mee met schermbreedte */
             .cell {
-                height: 70px;
-                font-size: 2.5rem;
+                height: 18vw; /* Relatief aan schermbreedte */
+                max-height: 80px;
+                font-size: 2rem;
                 border-radius: 10px;
             }
             .score-count {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
             .player-name-input {
                 font-size: 1rem;
@@ -211,6 +216,11 @@
             .btn {
                 padding: 10px 20px;
                 font-size: 1rem;
+                width: 100%; /* Knoppen breed op mobiel voor makkelijk klikken */
+                margin-bottom: 10px;
+            }
+            .scoreboard {
+                padding: 10px;
             }
         }
 
