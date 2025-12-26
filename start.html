@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kerst Spellenavond - Hoofdmenu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --xmas-red: #b01c1e;
+            --xmas-dark-red: #6d0f11;
+            --xmas-gold: #f8b229;
+            --xmas-gold-dark: #a8781a;
+            --xmas-green: #165b33;
+            --text-light: #f0f4f8;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(rgba(10, 30, 10, 0.9), rgba(30, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Sneeuw */
+        .snowflake { position: absolute; top: -20px; color: rgba(255,255,255,0.6); animation: fall linear forwards; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
+
+        /* Container */
+        .container {
+            background: linear-gradient(145deg, rgba(180, 30, 50, 0.95), rgba(100, 20, 30, 0.98));
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 6px rgba(168, 120, 26, 0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 95%;
+            max-width: 800px;
+            padding: 50px;
+            z-index: 10;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 4rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(to right, var(--xmas-gold), #fff, var(--xmas-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            line-height: 1.1;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        /* Grid voor de knoppen */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            justify-content: center;
+        }
+
+        /* De Game Kaarten (Links) */
+        .game-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--xmas-gold);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+
+        .icon { font-size: 3.5rem; margin-bottom: 15px; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .title { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Speciale Elize Knop */
+        .game-card.special {
+            background: linear-gradient(135deg, var(--xmas-gold), var(--xmas-gold-dark));
+            border-color: #fff;
+            grid-column: span 1; /* Of span 2 als je hem breed wilt */
+            animation: pulse-gold 3s infinite;
+        }
+        .game-card.special .title { color: #4a3200; }
+        .game-card.special .icon { text-shadow: none; }
+        
+        .game-card.special::after {
+            content: '⭐ EXCLUSIVE ⭐';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.6rem;
+            background: #fff;
+            color: #4a3200;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(248, 178, 41, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(248, 178, 41, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(248, 178, 41, 0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Familie Bijl Spellenavond</h1>
+    <h3>🎄 Kies een spel om te starten 🎄</h3>
+
+    <div class="game-grid">
+        <a href="30 seconds.html" class="game-card" target="_blank">
+            <div class="icon">⏱️</div>
+            <div class="title">30 Seconds</div>
+        </a>
+
+        <a href="sounds fishy.html" class="game-card" target="_blank">
+            <div class="icon">🐟</div>
+            <div class="title">Sounds Fishy</div>
+        </a>
+
+        <a href="Pictionary.html" class="game-card" target="_blank">
+            <div class="icon">🎨</div>
+            <div class="title">Pictionary</div>
+        </a>
+
+        <a href="Wie_is_de_Grinch.html" class="game-card" target="_blank">
+            <div class="icon">🕵️‍♂️</div>
+            <div class="title">Wie is de Grinch?</div>
+        </a>
+
+        <a href="Boter kaas en eitjes.html" class="game-card" target="_blank">
+            <div class="icon">⭕❌</div>
+            <div class="title">Boter, Kaas & Eieren</div>
+        </a>
+
+        <a href="Boter kaas en eitjes vals.html" class="game-card special" target="_blank">
+            <div class="icon">👑</div>
+            <div class="title">Boter, Kaas & Eieren<br><small style="font-size:0.8rem;">(Elize's Editie)</small></div>
+        </a>
+
+    </div>
+    
+    <div style="margin-top: 40px; font-size: 0.9rem; color: rgba(255,255,255,0.4);">
+        Gemaakt voor een onvergetelijke kerstavond
+    </div>
+</div>
+
+<script>
+    function createSnow() {
+        for(let i=0; i<40; i++) {
+            let snow = document.createElement('div');
+            snow.className = 'snowflake';
+            snow.innerHTML = '❄';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.animationDuration = (Math.random() * 5 + 3) + 's'; 
+            snow.style.opacity = Math.random() * 0.5;
+            snow.style.fontSize = (Math.random() * 15 + 8) + 'px';
+            document.body.appendChild(snow);
+        }
+    }
+    createSnow();
+</script>
+
+</body>
+</html>

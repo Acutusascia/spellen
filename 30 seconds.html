@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 Seconds - Kerst Editie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --xmas-red: #b01c1e;
+            --xmas-dark-red: #6d0f11;
+            --xmas-gold: #f8b229;
+            --xmas-gold-dark: #a8781a;
+            --xmas-green: #165b33;
+            --text-light: #f0f4f8;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(rgba(20, 40, 20, 0.9), rgba(40, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1512389142860-9c449e58a543?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Sneeuw */
+        .snowflake { position: absolute; top: -20px; color: rgba(255,255,255,0.6); animation: fall linear forwards; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
+
+        /* Container */
+        .container {
+            background: linear-gradient(145deg, rgba(180, 30, 50, 0.95), rgba(100, 20, 30, 0.98));
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 5px rgba(168, 120, 26, 0.5), inset 0 0 60px rgba(0,0,0,0.5);
+            border: 6px solid transparent;
+            border-image: linear-gradient(to bottom right, var(--xmas-gold), var(--xmas-gold-dark), var(--xmas-gold)) 1;
+            width: 95%;
+            max-width: 600px;
+            padding: 40px;
+            z-index: 10;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Header */
+        h1 {
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 4rem;
+            margin: 0;
+            background: linear-gradient(to right, var(--xmas-gold), #fff, var(--xmas-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.1;
+        }
+
+        h2 { color: var(--xmas-gold); font-size: 1.5rem; margin-top: 5px; }
+
+        /* Score Track */
+        .score-track-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .track-row {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .track-label { width: 80px; font-weight: bold; text-align: right; margin-right: 10px; font-size: 1.1rem;}
+        
+        .track-bar-bg {
+            flex-grow: 1;
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        .pawn {
+            position: absolute;
+            top: -15px;
+            font-size: 2rem;
+            transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+        }
+
+        /* Card Styles */
+        .card {
+            background: #fff;
+            color: #333;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 4px solid var(--xmas-gold);
+            transform: rotate(-1deg);
+        }
+
+        .word-item {
+            font-size: 1.5rem;
+            font-weight: 800;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .word-item:last-child { border-bottom: none; }
+
+        /* Timer Bar */
+        .timer-container {
+            width: 100%;
+            height: 30px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 2px solid var(--xmas-gold);
+            position: relative;
+        }
+        
+        .timer-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(to right, #2ecc71, #f1c40f);
+            transition: width 0.1s linear, background 0.3s;
+        }
+        .timer-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 0;
+            line-height: 26px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* Dice Box */
+        .dice-display {
+            font-size: 4rem;
+            color: var(--xmas-gold);
+            background: rgba(0,0,0,0.3);
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 15px;
+            margin: 0 auto 20px auto;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        /* Inputs & Buttons (Reused style) */
+        input[type="text"] {
+            padding: 10px 15px; border-radius: 20px; border: none; width: 70%; 
+            margin: 5px; font-size: 1rem; text-align: center; font-weight: bold;
+        }
+
+        .btn {
+            background: linear-gradient(to bottom, var(--xmas-gold), var(--xmas-gold-dark));
+            color: #4a3200;
+            border: 2px solid #fff;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: 900;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            font-family: 'Nunito', sans-serif;
+            text-transform: uppercase;
+        }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-red { background: linear-gradient(to bottom, var(--xmas-red), var(--xmas-dark-red)); color: white; border-color: var(--xmas-gold); }
+        .btn-green { background: linear-gradient(to bottom, #27ae60, #165b33); color: white; border-color: #85e0a3; }
+
+        .hidden { display: none !important; }
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        
+        /* Checkbox Score Select */
+        .score-buttons { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+        .score-btn { 
+            width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; 
+            background: rgba(255,255,255,0.2); color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer;
+        }
+        .score-btn:hover, .score-btn.active { background: var(--xmas-gold); color: #000; transform: scale(1.1); }
+
+    </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="container">
+    <h1>30 Seconds</h1>
+    <h2>🎄 Kerst Editie 🎄</h2>
+
+    <div class="score-track-container">
+        <div class="track-row">
+            <div class="track-label" id="label-team1">Team 1</div>
+            <div class="track-bar-bg">
+                <div class="pawn" id="pawn1" style="left: 0%;">🎄</div>
+            </div>
+        </div>
+        <div class="track-row">
+            <div class="track-label" id="label-team2">Team 2</div>
+            <div class="track-bar-bg">
+                <div class="pawn" id="pawn2" style="left: 0%;">⛄</div>
+            </div>
+        </div>
+        <div style="font-size:0.8rem; color:#ccc; margin-top:5px; text-align:right;">Finish bij 30 punten 🏁</div>
+    </div>
+
+    <div id="screen-setup">
+        <p>Voer de teamnamen in:</p>
+        <input type="text" id="team1-input" value="De Kerstballen"><br>
+        <input type="text" id="team2-input" value="De Oliebollen"><br>
+        <button class="btn btn-green" onclick="startGame()">Start Spel</button>
+    </div>
+
+    <div id="screen-preturn" class="hidden">
+        <h2 id="turn-title">... is aan de beurt!</h2>
+        <p>Gooi de dobbelsteen om je handicap te bepalen.</p>
+        <div class="dice-display" id="dice-val">🎲</div>
+        <button class="btn btn-gold" id="roll-btn" onclick="rollDice()">Gooi Dobbelsteen</button>
+        <div id="ready-area" class="hidden">
+            <p>Handicap: <strong id="handicap-text" style="color:var(--xmas-gold); font-size:1.4rem;">-</strong></p>
+            <p>Zorg dat je team klaar zit!</p>
+            <button class="btn btn-red" onclick="startRound()">Start 30 Seconden!</button>
+        </div>
+    </div>
+
+    <div id="screen-game" class="hidden">
+        <div class="timer-container">
+            <div class="timer-fill" id="timer-bar"></div>
+            <div class="timer-text" id="timer-text">30</div>
+        </div>
+
+        <div class="card">
+            <div class="word-item" id="word1">...</div>
+            <div class="word-item" id="word2">...</div>
+            <div class="word-item" id="word3">...</div>
+            <div class="word-item" id="word4">...</div>
+            <div class="word-item" id="word5">...</div>
+        </div>
+        <p style="font-size:0.9rem; color:#888; font-style:italic;">(Je kunt pas klikken als de tijd om is)</p>
+    </div>
+
+    <div id="screen-score" class="hidden">
+        <h2>Tijd is om! ⏰</h2>
+        <p>Hoeveel woorden heeft <strong><span id="score-team-name">...</span></strong> geraden?</p>
+        
+        <div class="score-buttons">
+            <button class="score-btn" onclick="selectScore(0)">0</button>
+            <button class="score-btn" onclick="selectScore(1)">1</button>
+            <button class="score-btn" onclick="selectScore(2)">2</button>
+            <button class="score-btn" onclick="selectScore(3)">3</button>
+            <button class="score-btn" onclick="selectScore(4)">4</button>
+            <button class="score-btn" onclick="selectScore(5)">5</button>
+        </div>
+
+        <div id="calc-area" style="margin-top:20px; font-size:1.1rem;" class="hidden">
+            Geraden: <span id="calc-guessed">0</span><br>
+            Min Handicap: <span id="calc-handicap" style="color:red;">-0</span><br>
+            <hr style="width:50%; border-color:rgba(255,255,255,0.2);">
+            <strong>Stappen vooruit: <span id="calc-total" style="color:var(--xmas-gold); font-size:1.5rem;">0</span></strong>
+            <br><br>
+            <button class="btn btn-green" onclick="confirmMove()">Volgende Ronde</button>
+        </div>
+    </div>
+
+    <div id="screen-winner" class="hidden">
+        <h1 style="font-size:3rem;">Gefeliciteerd!</h1>
+        <h2 id="winner-text" style="font-size:2.5rem; color: #fff;">...</h2>
+        <p>Jullie zijn de ultieme Kerstkampioenen!</p>
+        <button class="btn btn-gold" onclick="location.reload()">Nieuw Spel</button>
+    </div>
+
+</div>
+
+<script>
+    // === DATA ===
+    const WIN_SCORE = 30;
+    let teams = [
+        { name: "Team 1", score: 0, icon: "🎄", color: "#2ecc71" },
+        { name: "Team 2", score: 0, icon: "⛄", color: "#3498db" }
+    ];
+    let currentTurn = 0; // 0 or 1
+    let currentHandicap = 0;
+    let selectedGuessedCount = 0;
+    let timerInterval;
+
+    // Database van woorden (Mix van Kerst, Algemeen, Nederland)
+    const cardsDeck = [
+        ["Kerstman", "Schoorsteen", "Coca Cola", "Baard", "Rendier"],
+        ["Sneeuwpop", "Wortel", "Frozen", "Olaf", "Smelten"],
+        ["Mariah Carey", "All I Want For Christmas", "Radio", "Hoge noot", "Zangeres"],
+        ["Gourmetten", "Pannetjes", "Supermarkt", "Stank", "Vlees"],
+        ["Home Alone", "Kevin", "Inbrekers", "New York", "Macaulay Culkin"],
+        ["Kerstboom", "Piek", "Ballen", "Naalden", "Kunstboom"],
+        ["Oliebol", "Poedersuiker", "Oudjaar", "Kraam", "Vet"],
+        ["Vuurwerk", "Knallen", "Siervuurwerk", "Hond", "Verboden"],
+        ["Elfstedentocht", "Friesland", "Schaatsen", "Kluunen", "Giet it oan"],
+        ["Max Verstappen", "Formule 1", "Red Bull", "Auto", "Snelheid"],
+        ["Eiffeltoren", "Parijs", "Frankrijk", "Metaal", "Toerist"],
+        ["Pindakaas", "Calvé", "Brood", "Noten", "Pot"],
+        ["Mol", "Wie is de Mol", "Televisie", "Spel", "Saboteur"],
+        ["Tulpen", "Amsterdam", "Keukenhof", "Bollen", "Lente"],
+        ["Kaas", "Gouda", "Geel", "Koe", "Gaten"],
+        ["Fiets", "Trappers", "Stuur", "Nederland", "Slot"],
+        ["Koning Willem-Alexander", "Máxima", "Baard", "Kroon", "Paleis"],
+        ["Ikea", "Zweeds", "Gehaktballetjes", "Kast", "Inbussleutel"],
+        ["Harry Potter", "Tovenaar", "Bril", "Zwerkbal", "Engeland"],
+        ["Donald Duck", "Weekblad", "Eend", "Katrien", "Oom Dagobert"],
+        ["De Efteling", "Kaatsheuvel", "Pretpark", "Sprookjesbos", "Python"],
+        ["Chocoladeletter", "Sinterklaas", "Puur", "Melk", "December"],
+        ["Titanic", "Boot", "IJsberg", "Film", "Leonardo DiCaprio"],
+        ["McDonald's", "Big Mac", "Gele M", "Friet", "Drive-thru"],
+        ["Netflix", "Series", "Films", "Streamen", "Abonnement"],
+        ["Vrijheidsbeeld", "New York", "Amerika", "Fakkel", "Kroon"],
+        ["Whatsapp", "Groen", "Berichtjes", "Telefoon", "Blauwe vinkjes"],
+        ["Patat", "Mayonaise", "Snackbar", "Frituur", "Aardappel"],
+        ["Euro", "Geld", "Munt", "Europa", "Betalen"],
+        ["Facebook", "Mark Zuckerberg", "Social Media", "Blauw", "Vrienden"]
+    ];
+
+    // === GAME LOGIC ===
+
+    function startGame() {
+        teams[0].name = document.getElementById('team1-input').value || "Team 1";
+        teams[1].name = document.getElementById('team2-input').value || "Team 2";
+        
+        document.getElementById('label-team1').innerText = teams[0].name.substring(0, 10);
+        document.getElementById('label-team2').innerText = teams[1].name.substring(0, 10);
+        
+        setupTurn();
+    }
+
+    function setupTurn() {
+        showScreen('screen-preturn');
+        document.getElementById('turn-title').innerText = `🎄 ${teams[currentTurn].name} is aan de beurt!`;
+        document.getElementById('dice-val').innerText = "🎲";
+        document.getElementById('roll-btn').classList.remove('hidden');
+        document.getElementById('ready-area').classList.add('hidden');
+    }
+
+    function rollDice() {
+        // Simpele animatie
+        const diceEl = document.getElementById('dice-val');
+        let rolls = 0;
+        let interval = setInterval(() => {
+            const vals = [0, 1, 2];
+            diceEl.innerText = vals[Math.floor(Math.random() * vals.length)];
+            rolls++;
+            if(rolls > 10) {
+                clearInterval(interval);
+                finalizeDice();
+            }
+        }, 100);
+    }
+
+    function finalizeDice() {
+        const vals = [0, 1, 2];
+        currentHandicap = vals[Math.floor(Math.random() * vals.length)];
+        
+        const diceEl = document.getElementById('dice-val');
+        diceEl.innerText = currentHandicap;
+        
+        // Stijl de dobbelsteen kleur op basis van geluk
+        if(currentHandicap === 0) diceEl.style.color = "#2ecc71"; // Groen (Goed!)
+        else if(currentHandicap === 2) diceEl.style.color = "#e74c3c"; // Rood (Pech!)
+        else diceEl.style.color = "var(--xmas-gold)";
+
+        document.getElementById('handicap-text').innerText = "-" + currentHandicap;
+        document.getElementById('roll-btn').classList.add('hidden');
+        document.getElementById('ready-area').classList.remove('hidden');
+    }
+
+    function startRound() {
+        showScreen('screen-game');
+        
+        // Selecteer willekeurige kaart
+        const card = cardsDeck[Math.floor(Math.random() * cardsDeck.length)];
+        for(let i=1; i<=5; i++) {
+            document.getElementById(`word${i}`).innerText = card[i-1];
+        }
+
+        // Timer Logic
+        let timeLeft = 30;
+        const bar = document.getElementById('timer-bar');
+        const text = document.getElementById('timer-text');
+        
+        bar.style.width = "100%";
+        bar.style.background = "linear-gradient(to right, #2ecc71, #f1c40f)";
+        text.innerText = 30;
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            text.innerText = timeLeft;
+            bar.style.width = (timeLeft / 30 * 100) + "%";
+
+            if(timeLeft < 10) {
+                bar.style.background = "linear-gradient(to right, #e74c3c, #c0392b)";
+            }
+
+            if(timeLeft <= 0) {
+                clearInterval(timerInterval);
+                endRound();
+            }
+        }, 1000);
+    }
+
+    function endRound() {
+        showScreen('screen-score');
+        document.getElementById('score-team-name').innerText = teams[currentTurn].name;
+        // Reset score selection UI
+        document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('calc-area').classList.add('hidden');
+    }
+
+    function selectScore(num) {
+        selectedGuessedCount = num;
+        document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // Bereken resultaat
+        let move = selectedGuessedCount - currentHandicap;
+        if(move < 0) move = 0; // Niet achteruit
+
+        document.getElementById('calc-guessed').innerText = selectedGuessedCount;
+        document.getElementById('calc-handicap').innerText = "-" + currentHandicap;
+        document.getElementById('calc-total').innerText = "+" + move + " stappen";
+        
+        document.getElementById('calc-area').classList.remove('hidden');
+    }
+
+    function confirmMove() {
+        let move = selectedGuessedCount - currentHandicap;
+        if(move < 0) move = 0;
+
+        teams[currentTurn].score += move;
+        if(teams[currentTurn].score > WIN_SCORE) teams[currentTurn].score = WIN_SCORE;
+
+        updateBoard();
+
+        if(teams[currentTurn].score >= WIN_SCORE) {
+            showWinner();
+        } else {
+            // Wissel beurt
+            currentTurn = currentTurn === 0 ? 1 : 0;
+            setupTurn();
+        }
+    }
+
+    function updateBoard() {
+        const p1Pct = (teams[0].score / WIN_SCORE) * 100;
+        const p2Pct = (teams[1].score / WIN_SCORE) * 100;
+
+        // Zorg dat de pion niet buiten de balk valt (max left = 90% ongeveer afh van breedte)
+        document.getElementById('pawn1').style.left = `calc(${p1Pct}% - 10px)`;
+        document.getElementById('pawn2').style.left = `calc(${p2Pct}% - 10px)`;
+    }
+
+    function showWinner() {
+        showScreen('screen-winner');
+        document.getElementById('winner-text').innerText = teams[currentTurn].name;
+        fireConfetti();
+    }
+
+    function showScreen(id) {
+        const screens = ['screen-setup', 'screen-preturn', 'screen-game', 'screen-score', 'screen-winner'];
+        screens.forEach(s => document.getElementById(s).classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    /* === Sneeuw & Confetti (Hergebruik van vorige code) === */
+    function createSnow() {
+        for(let i=0; i<30; i++) {
+            let snow = document.createElement('div');
+            snow.className = 'snowflake';
+            snow.innerHTML = '❄';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.animationDuration = (Math.random() * 5 + 3) + 's'; 
+            snow.style.opacity = Math.random() * 0.5;
+            snow.style.fontSize = (Math.random() * 15 + 8) + 'px';
+            document.body.appendChild(snow);
+        }
+    }
+    createSnow();
+
+    function fireConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let pieces = [];
+        const colors = ['#d42426', '#165b33', '#f8b229', '#ffffff'];
+        for(let i=0; i<300; i++) {
+            pieces.push({
+                x: canvas.width / 2, y: canvas.height / 2, w: Math.random()*10+5, h: Math.random()*10+5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: (Math.random()-0.5)*30, vy: (Math.random()-0.5)*30, grav: 0.2
+            });
+        }
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pieces = pieces.filter(p => p.y < canvas.height);
+            pieces.forEach((p) => {
+                p.x += p.vx; p.y += p.vy; p.vy += p.grav; p.vx *= 0.96;
+                ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.w, p.h);
+            });
+            if(pieces.length > 0) requestAnimationFrame(update);
+        }
+        update();
+    }
+</script>
+
+</body>
+</html>

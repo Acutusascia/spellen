@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wie is de Grinch?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --xmas-red: #b01c1e;
+            --xmas-dark-red: #6d0f11;
+            --xmas-gold: #f8b229;
+            --xmas-gold-dark: #a8781a;
+            --xmas-green: #165b33;
+            --text-light: #f0f4f8;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(rgba(10, 30, 10, 0.9), rgba(30, 10, 10, 0.9)), url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .snowflake { position: absolute; top: -20px; color: rgba(255,255,255,0.6); animation: fall linear forwards; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
+
+        .container {
+            background: linear-gradient(145deg, rgba(180, 30, 50, 0.95), rgba(100, 20, 30, 0.98));
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 5px rgba(168, 120, 26, 0.5);
+            border: 6px solid transparent;
+            border-image: linear-gradient(to bottom right, var(--xmas-gold), var(--xmas-gold-dark), var(--xmas-gold)) 1;
+            width: 95%; max-width: 600px; padding: 40px; z-index: 10;
+            text-align: center; position: relative; backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            font-family: 'Mountains of Christmas', cursive; font-size: 3.5rem; margin: 0 0 10px 0;
+            background: linear-gradient(to right, var(--xmas-gold), #fff, var(--xmas-gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Uitleg Box */
+        .rules-box {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--xmas-gold);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .rules-box strong { color: var(--xmas-gold); }
+
+        /* Card Styles */
+        .role-card {
+            background: #fff; color: #333; padding: 30px; border-radius: 20px;
+            margin: 20px 0; transform: rotate(-1deg); border: 4px solid var(--xmas-gold);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); min-height: 200px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        
+        .role-title { font-size: 1.2rem; text-transform: uppercase; color: #888; margin-bottom: 5px; font-weight: 800;}
+        .role-value { font-size: 2.2rem; font-weight: 900; color: var(--xmas-red); margin-bottom: 5px; line-height: 1.1; }
+        .role-desc { font-size: 1.1rem; color: #555; font-style: italic; margin-bottom: 20px; max-width: 90%; }
+        
+        .loc-desc { font-size: 1rem; color: #555; font-weight: bold; margin-bottom: 25px; border-bottom: 1px solid #ddd; padding-bottom: 10px; width: 100%;}
+
+        .grinch-text { color: var(--xmas-green); font-family: 'Mountains of Christmas'; font-size: 3rem; }
+
+        /* Timer */
+        .timer-circle {
+            width: 150px; height: 150px; border-radius: 50%; border: 5px solid var(--xmas-gold);
+            display: flex; justify-content: center; align-items: center; margin: 20px auto;
+            font-size: 3rem; font-weight: 900; background: rgba(0,0,0,0.3);
+            box-shadow: 0 0 20px rgba(248, 178, 41, 0.3);
+        }
+
+        /* Inputs & Buttons */
+        input[type="text"] {
+            padding: 12px 20px; border-radius: 25px; border: none; width: 60%; 
+            margin: 5px; font-size: 1.1rem; text-align: center; font-weight: bold;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .btn {
+            background: linear-gradient(to bottom, var(--xmas-gold), var(--xmas-gold-dark));
+            color: #4a3200; border: 2px solid #fff; padding: 15px 30px;
+            font-size: 1.2rem; border-radius: 50px; cursor: pointer; margin: 10px;
+            font-weight: 900; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            font-family: 'Nunito', sans-serif; text-transform: uppercase; transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn-green { background: linear-gradient(to bottom, #27ae60, #165b33); color: white; border-color: #85e0a3; }
+        .btn-red { background: linear-gradient(to bottom, var(--xmas-red), var(--xmas-dark-red)); color: white; border-color: var(--xmas-gold); }
+
+        .player-tag { 
+            display: inline-block; background: rgba(255,255,255,0.2); padding: 5px 15px; 
+            border-radius: 20px; margin: 5px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .hidden { display: none !important; }
+        
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Wie is de Grinch?</h1>
+    <p style="font-size: 1.1rem; opacity: 0.8; margin-bottom: 20px;">🕵️‍♂️ Kerst Mysterie Spel</p>
+
+    <div id="screen-setup">
+        
+        <div class="rules-box">
+            <strong>Hoe werkt het?</strong><br>
+            1. Iedereen krijgt een rol en locatie, behalve één persoon: <strong>De Grinch</strong>.<br>
+            2. De Grinch weet <strong>niet</strong> waar we zijn.<br>
+            3. Start de timer! Iedereen stelt elkaar om de beurt een vraag over de locatie.<br>
+            4. <strong>Doel:</strong> Ontmasker de Grinch zonder de locatie te verraden. De Grinch moet doen alsof hij/zij erbij hoort!
+        </div>
+
+        <p>Voeg spelers toe (minimaal 3):</p>
+        <div style="display:flex; justify-content:center; gap:10px;">
+            <input type="text" id="player-input" placeholder="Naam..." onkeydown="if(event.key==='Enter') addPlayer()">
+            <button class="btn btn-green" style="padding: 10px 20px; margin:5px;" onclick="addPlayer()">+</button>
+        </div>
+        <div id="player-list" style="margin: 20px 0;"></div>
+        <button class="btn" onclick="startGame()">Start Ronde</button>
+    </div>
+
+    <div id="screen-pass" class="hidden">
+        <h2>Geef het apparaat aan:</h2>
+        <h1 id="pass-name" style="font-size: 4rem; margin: 20px 0;">...</h1>
+        <p>Zorg dat niemand anders meekijkt!</p>
+        <button class="btn btn-gold" onclick="revealRole()">Bekijk mijn rol</button>
+    </div>
+
+    <div id="screen-reveal" class="hidden">
+        <h2 id="reveal-header">Hallo ...</h2>
+        <div class="role-card">
+            <div id="content-civilian">
+                <div class="role-title">Locatie:</div>
+                <div class="role-value" id="loc-val">...</div>
+                <div class="loc-desc" id="loc-desc">...</div>
+                
+                <div class="role-title">Jouw Rol:</div>
+                <div class="role-value" style="color:#333; font-size:1.8rem;" id="role-val">...</div>
+                <div class="role-desc" id="role-desc">...</div>
+            </div>
+            <div id="content-grinch" class="hidden">
+                <div class="grinch-text">Jij bent de Grinch!</div>
+                <p>Je weet niet waar we zijn.<br>Doe alsof je erbij hoort en raad de locatie!</p>
+            </div>
+        </div>
+        <button class="btn btn-green" onclick="nextPlayer()">Begrepen, volgende!</button>
+    </div>
+
+    <div id="screen-game" class="hidden">
+        <h2>Discussieer!</h2>
+        <p>Stel vragen, maar verraad de locatie niet.</p>
+        
+        <div class="timer-circle" id="timer">05:00</div>
+        
+        <p style="opacity: 0.7; font-size: 0.9rem;">(Geen spiekbriefje meer! De Grinch moet gokken.)</p>
+        
+        <button class="btn btn-red" onclick="stopGame()">Grinch Gevonden / Geef op</button>
+    </div>
+
+    <div id="screen-end" class="hidden">
+        <h1>Onthulling!</h1>
+        <div class="role-card">
+            <div class="role-title">De locatie was:</div>
+            <div class="role-value" id="end-loc">...</div>
+            <div class="role-title">De Grinch was:</div>
+            <div class="grinch-text" id="end-grinch" style="font-size:2.5rem; color:var(--xmas-red);">...</div>
+        </div>
+        <button class="btn btn-gold" onclick="resetGame()">Nieuwe Ronde</button>
+    </div>
+
+</div>
+
+<script>
+    // === DATA: LOCATIES & ROLEN (MET UITLEG) ===
+    const locations = [
+        // --- KLASSIEKERS ---
+        { 
+            name: "De Noordpool", 
+            desc: "Waar de Kerstman woont en cadeautjes maakt.",
+            roles: [
+                {n: "Kerstman", d: "De baas die de cadeautjes brengt."},
+                {n: "Hoofd Elf", d: "Jij bent de baas van de speelgoedmakers."},
+                {n: "Rudolph", d: "Het rendier met de rode neus."},
+                {n: "Pakjesinpakker", d: "Jij pakt de hele dag cadeaus in."},
+                {n: "Mevrouw Claus", d: "De vrouw van de Kerstman."},
+                {n: "Staljongen", d: "Jij geeft de rendieren te eten."}
+            ]
+        },
+        { 
+            name: "Kerstmarkt", 
+            desc: "Buiten met kraampjes, lichtjes en lekker eten.",
+            roles: [
+                {n: "Glühwein verkoper", d: "Jij verkoopt warme drankjes."},
+                {n: "Toerist", d: "Je bent hier om sfeer te proeven en foto's te maken."},
+                {n: "Schaatser", d: "Jij glijdt over de ijsbaan."},
+                {n: "Zakkenroller", d: "Jij probeert stiekem portemonnees te stelen."},
+                {n: "Oliebollenbakker", d: "Jij staat in de kraam bollen te bakken."},
+                {n: "Kerstboomverkoper", d: "Jij probeert bomen te verkopen."}
+            ]
+        },
+        { 
+            name: "In de Arrenslee", 
+            desc: "Hoog in de lucht, vliegend met de Kerstman.",
+            roles: [
+                {n: "Kerstman", d: "Jij stuurt de slee aan."},
+                {n: "Het Navigatiesysteem", d: "Jij vertelt de weg (links, rechts!)."},
+                {n: "Bange Elf", d: "Je vindt het vliegen heel eng."},
+                {n: "Verkouden Rendier", d: "Je moet de hele tijd niezen tijdens het vliegen."},
+                {n: "Stiekeme Verstekeling", d: "Je hebt je verstopt in de slee."},
+                {n: "De Cadeauzak", d: "Je bent gewoon een grote zak met pakjes."}
+            ]
+        },
+        { 
+            name: "Kerstdiner", 
+            desc: "Aan tafel zitten met familie en veel eten.",
+            roles: [
+                {n: "De dronken Oom", d: "Je hebt iets te veel wijn op en maakt grapjes."},
+                {n: "De gestreste Kok", d: "Je bent bang dat het eten mislukt."},
+                {n: "De Vegetariër", d: "Je wilt geen vlees eten."},
+                {n: "Oma", d: "Je vindt het gezellig maar hoort het niet zo goed."},
+                {n: "De Baby", d: "Je huilt en gooit met eten."},
+                {n: "De Kalkoen", d: "Jij bent het hoofdgerecht (oeps!)."}
+            ]
+        },
+        { 
+            name: "Stal in Bethlehem", 
+            desc: "Waar kindje Jezus is geboren, tussen de dieren.",
+            roles: [
+                {n: "Maria", d: "De moeder van de baby."},
+                {n: "Jozef", d: "De vader van de baby."},
+                {n: "De Ezel", d: "Je staat in de stal en zegt balk-balk."},
+                {n: "Wijze uit het Oosten", d: "Je komt een duur cadeau brengen."},
+                {n: "Herder", d: "Je past op de schapen."},
+                {n: "Engel", d: "Je zingt en vliegt in de lucht."}
+            ]
+        },
+        
+        // --- WINTERSPORT & KOU ---
+        { 
+            name: "Ski-oord", 
+            desc: "Boven in de bergen met sneeuw om te skiën.",
+            roles: [
+                {n: "Skileraar", d: "Je leert mensen skiën."},
+                {n: "De Après-skiër", d: "Je bent hier alleen om te feesten."},
+                {n: "Sneeuwschuiver", d: "Je maakt de wegen sneeuwvrij."},
+                {n: "De gewonde toerist", d: "Je hebt je been gebroken."},
+                {n: "Liftbediende", d: "Je helpt mensen in de stoeltjeslift."},
+                {n: "Yeti", d: "Het verschrikkelijke sneeuwmonster."}
+            ]
+        },
+        { 
+            name: "Schaatsbaan", 
+            desc: "Glad ijs waar je rondjes op rijdt.",
+            roles: [
+                {n: "Kunstschaatser", d: "Je maakt mooie pirouettes."},
+                {n: "Krabbelaar", d: "Je kan niet schaatsen en valt steeds."},
+                {n: "Koek & Zopie verkoper", d: "Je verkoopt snert en chocomel."},
+                {n: "Zamboni Chauffeur", d: "Je bestuurt de machine die het ijs glad maakt."},
+                {n: "IJshockeyer", d: "Je schaatst heel hard met een stick."},
+                {n: "De date", d: "Je probeert indruk te maken op je vriend(in)."}
+            ]
+        },
+        { 
+            name: "De Elfstedentocht", 
+            desc: "Een hele lange tocht op schaatsen door Friesland.",
+            roles: [
+                {n: "Rayonhoofd", d: "De baas die kijkt of het ijs dik genoeg is."},
+                {n: "De Kluner", d: "Je loopt op schaatsen over het land."},
+                {n: "De Koning", d: "Je doet stiekem mee met een muts op."},
+                {n: "Erben Wennemars", d: "Een hele snelle en drukke schaatser."},
+                {n: "Stempelaar", d: "Je zet stempels op de kaarten."},
+                {n: "Toeschouwer", d: "Je staat langs de kant te juichen."}
+            ]
+        },
+        { 
+            name: "In een Iglo", 
+            desc: "Een rond huisje gemaakt van ijsblokken.",
+            roles: [
+                {n: "Eskimo (Inuit)", d: "Je woont hier."},
+                {n: "IJsbeer", d: "Je loopt buiten rond en zoekt eten."},
+                {n: "Pinguïn", d: "Je bent verdwaald (want die wonen op de Zuidpool)."},
+                {n: "De Toerist", d: "Je vindt het hier veel te koud."},
+                {n: "Vuurmaker", d: "Je probeert een vuurtje te maken."},
+                {n: "Sneeuwhond", d: "Je trekt de slee."}
+            ]
+        },
+        { 
+            name: "Wellness Resort", 
+            desc: "Een plek om te relaxen met baden en sauna's.",
+            roles: [
+                {n: "Masseur", d: "Je geeft mensen massages."},
+                {n: "Sauna-ganger", d: "Je zit te zweten in een hete kamer."},
+                {n: "Iemand in badjas", d: "Je loopt relaxed rond."},
+                {n: "De hitte-hater", d: "Je vindt de sauna vreselijk."},
+                {n: "Handdoekendief", d: "Je pakt stiekem handdoeken van anderen."},
+                {n: "Meditatie leraar", d: "Je vertelt iedereen dat ze stil moeten zijn."}
+            ]
+        },
+
+        // --- FILMS & MEDIA ---
+        { 
+            name: "Scrooge's Kantoor", 
+            desc: "Het ouderwetse kantoor van de gierige Scrooge.",
+            roles: [
+                {n: "Ebenezer Scrooge", d: "Een hele gierige, boze man."},
+                {n: "Bob Cratchit", d: "De arme werknemer van Scrooge."},
+                {n: "Geest v/h Verleden", d: "Je laat zien wat er vroeger gebeurde."},
+                {n: "Geest v/h Heden", d: "Je laat zien wat er nu gebeurt."},
+                {n: "Geest v/d Toekomst", d: "Je bent eng en laat de toekomst zien."},
+                {n: "Tiny Tim", d: "Het zieke, lieve jongetje."}
+            ]
+        },
+        { 
+            name: "Kevin's Huis (Home Alone)", 
+            desc: "Een groot huis waar boeven in proberen te breken.",
+            roles: [
+                {n: "Kevin", d: "Het jongetje dat alleen thuis is."},
+                {n: "Inbreker Harry", d: "De slimme inbreker."},
+                {n: "Inbreker Marv", d: "De domme inbreker."},
+                {n: "De Vogelvrouw", d: "De vrouw met de duiven."},
+                {n: "De Pizzabezorger", d: "Je brengt een pizza kaas."},
+                {n: "De Spin", d: "De tarantula van Buzz."}
+            ]
+        },
+        { 
+            name: "De Polar Express", 
+            desc: "Een magische stoomtrein op weg naar de Noordpool.",
+            roles: [
+                {n: "De Conducteur", d: "Je knipt kaartjes in de trein."},
+                {n: "Jongetje in Pyjama", d: "De hoofdpersoon."},
+                {n: "De Kerstman", d: "Je wacht op de Noordpool."},
+                {n: "Serveerder", d: "Je brengt warme chocomel al dansend."},
+                {n: "Het kaartje", d: "Je waait weg in de wind."},
+                {n: "Zwerver op het dak", d: "Je woont bovenop de trein."}
+            ]
+        },
+        
+        // --- SHOPPEN & DRUKTE ---
+        { 
+            name: "Intratuin Kerstshow", 
+            desc: "Een groot tuincentrum vol kerstversiering en lampjes.",
+            roles: [
+                {n: "Beveiliger", d: "Je let op dat niemand iets steelt."},
+                {n: "Lemax Verzamelaar", d: "Je kijkt naar de miniatuur huisjes."},
+                {n: "Sloop-kind", d: "Je raakt alles aan wat breekbaar is."},
+                {n: "Vakkenvuller", d: "Je legt de kerstballen in de schappen."},
+                {n: "Kassière", d: "Je scant de spullen."},
+                {n: "Bezoeker", d: "Je komt alleen voor de gratis inspiratie."}
+            ]
+        },
+        { 
+            name: "De Speelgoedwinkel", 
+            desc: "Een winkel vol met poppen, auto's en spellen.",
+            roles: [
+                {n: "Schreeuwend Kind", d: "Je wilt ALLES hebben!"},
+                {n: "De Verkoper", d: "Je helpt mensen speelgoed kiezen."},
+                {n: "Lego Bouwer", d: "Je bouwt een grote toren."},
+                {n: "Sinterklaas", d: "Je bent in de verkeerde maand hier."},
+                {n: "Dief", d: "Je probeert iets te stelen."},
+                {n: "De Manager", d: "Je bent de baas van de winkel."}
+            ]
+        },
+        { 
+            name: "Supermarkt (24 dec)", 
+            desc: "De winkel waar iedereen eten koopt voor kerst.",
+            roles: [
+                {n: "De Hamsteraar", d: "Je koopt 10 broden en veel wc-papier."},
+                {n: "De Vakkenvuller", d: "Je werkt heel hard om alles bij te vullen."},
+                {n: "Gestresste Moeder", d: "Je bent het toetje vergeten!"},
+                {n: "Kassamedewerker", d: "Je zegt de hele dag 'bliep'."},
+                {n: "Statiegeld-verzamelaar", d: "Je levert heel veel flessen in."},
+                {n: "Zegeltjes-fan", d: "Je vraagt aan iedereen 'wil jij je zegeltjes nog?'"}
+            ]
+        },
+        { 
+            name: "IKEA (Kerstvakantie)", 
+            desc: "Een hele grote woonwinkel met pijlen op de vloer.",
+            roles: [
+                {n: "Balletjes schepper", d: "Je schept Zweedse balletjes in het restaurant."},
+                {n: "Verdwaalde man", d: "Je kan de uitgang niet vinden."},
+                {n: "Koppel met ruzie", d: "Jullie vechten over welke bank mooier is."},
+                {n: "Magazijnmedewerker", d: "Je rijdt op een heftruck."},
+                {n: "Billy de Kast", d: "Je bent een boekenkast."},
+                {n: "Kind in de ballenbak", d: "Je bent je ouders kwijt."}
+            ]
+        },
+
+        // --- TRADITIE & LOCATIES ---
+        { 
+            name: "Oudejaarsavond", 
+            desc: "Wachten tot de klok 12 uur slaat met vuurwerk.",
+            roles: [
+                {n: "Oliebollenbakker", d: "Je staat in de stank bollen te bakken."},
+                {n: "Vuurwerkafsteker", d: "Je steekt pijlen af."},
+                {n: "Bange Hond", d: "Je zit trillend onder de bank."},
+                {n: "De Buurman", d: "Je klaagt over de herrie."},
+                {n: "Champagne Fles", d: "Je gaat bijna knallen!"},
+                {n: "Afteller", d: "Je roept: 3... 2... 1..."}
+            ]
+        },
+        { 
+            name: "Kerstbomenbos", 
+            desc: "In het bos om een boom om te zagen.",
+            roles: [
+                {n: "De Houthakker", d: "Je zaagt bomen om."},
+                {n: "De Eekhoorn", d: "Je woont in een boom."},
+                {n: "Koper met zaag", d: "Je zoekt de mooiste boom uit."},
+                {n: "De Kale Boom", d: "Niemand wil jou hebben."},
+                {n: "De Perfecte Boom", d: "Iedereen wil jou hebben."},
+                {n: "Vader", d: "Je probeert de boom op het autodak te binden."}
+            ]
+        },
+        { 
+            name: "De Nachtmis (Kerk)", 
+            desc: "Midden in de nacht in de kerk.",
+            roles: [
+                {n: "De Pastoor", d: "Je vertelt verhalen voor in de kerk."},
+                {n: "Slapend kind", d: "Het is veel te laat voor jou."},
+                {n: "Koorzanger", d: "Je zingt kerstliedjes."},
+                {n: "De Orgelspeler", d: "Je maakt muziek op het orgel."},
+                {n: "Collecte-ophaler", d: "Je haalt geld op met een zak."},
+                {n: "Laatkomer", d: "Je komt binnen als het al begonnen is."}
+            ]
+        },
+        { 
+            name: "In de Schoorsteen", 
+            desc: "De smalle pijp waar de rook door naar buiten gaat.",
+            roles: [
+                {n: "Zwarte Piet", d: "Je klimt erdoorheen."},
+                {n: "Kerstman", d: "Je zit vast met je dikke buik."},
+                {n: "Schoorsteenveger", d: "Je maakt hem schoon."},
+                {n: "Vogelnest", d: "Je woont hier."},
+                {n: "Rookwolk", d: "Je stijgt op uit het vuur."},
+                {n: "Baksteen", d: "Je bent een deel van de muur."}
+            ]
+        }
+    ];
+
+    let players = [];
+    let currentPlayerIndex = 0;
+    let roundData = {};
+    let timerInterval;
+
+    // === SETUP ===
+    function addPlayer() {
+        const input = document.getElementById('player-input');
+        const name = input.value.trim();
+        if(name) {
+            players.push(name);
+            renderPlayers();
+            input.value = '';
+        }
+    }
+
+    function renderPlayers() {
+        const list = document.getElementById('player-list');
+        list.innerHTML = players.map(p => `<span class="player-tag">${p}</span>`).join('');
+    }
+
+    function startGame() {
+        if(players.length < 3) { alert("Je hebt minimaal 3 spelers nodig!"); return; }
+        
+        // Kies willekeurige locatie
+        const randomLoc = locations[Math.floor(Math.random() * locations.length)];
+        // Kies willekeurige Grinch
+        const grinchIndex = Math.floor(Math.random() * players.length);
+        
+        roundData = {
+            location: randomLoc.name,
+            locationDesc: randomLoc.desc, // De uitleg opslaan
+            grinchIndex: grinchIndex,
+            roles: []
+        };
+
+        // Verdeel rollen
+        let roleCounter = 0;
+        for(let i=0; i<players.length; i++) {
+            if(i === grinchIndex) {
+                roundData.roles.push({ type: 'grinch' });
+            } else {
+                const roleObj = randomLoc.roles[roleCounter % randomLoc.roles.length];
+                roundData.roles.push({ type: 'civilian', role: roleObj.n, desc: roleObj.d });
+                roleCounter++;
+            }
+        }
+
+        currentPlayerIndex = 0;
+        showScreen('screen-pass');
+        updatePassScreen();
+    }
+
+    // === REVEAL LOOP ===
+    function updatePassScreen() {
+        document.getElementById('pass-name').innerText = players[currentPlayerIndex];
+    }
+
+    function revealRole() {
+        showScreen('screen-reveal');
+        document.getElementById('reveal-header').innerText = `Hallo ${players[currentPlayerIndex]}`;
+        
+        const myData = roundData.roles[currentPlayerIndex];
+        
+        if(myData.type === 'grinch') {
+            document.getElementById('content-civilian').classList.add('hidden');
+            document.getElementById('content-grinch').classList.remove('hidden');
+        } else {
+            document.getElementById('content-civilian').classList.remove('hidden');
+            document.getElementById('content-grinch').classList.add('hidden');
+            document.getElementById('loc-val').innerText = roundData.location;
+            document.getElementById('loc-desc').innerText = roundData.locationDesc; // Toon uitleg
+            document.getElementById('role-val').innerText = myData.role;
+            document.getElementById('role-desc').innerText = myData.desc;
+        }
+    }
+
+    function nextPlayer() {
+        currentPlayerIndex++;
+        if(currentPlayerIndex < players.length) {
+            showScreen('screen-pass');
+            updatePassScreen();
+        } else {
+            startMainGame();
+        }
+    }
+
+    // === MAIN GAME ===
+    function startMainGame() {
+        showScreen('screen-game');
+        
+        // Timer starten (5 minuten)
+        let timeLeft = 5 * 60;
+        const timerEl = document.getElementById('timer');
+        
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            timerEl.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            
+            if(timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerEl.style.color = "red";
+                timerEl.innerText = "TIJD!";
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    function stopGame() {
+        clearInterval(timerInterval);
+        showScreen('screen-end');
+        document.getElementById('end-loc').innerText = roundData.location;
+        document.getElementById('end-grinch').innerText = players[roundData.grinchIndex];
+    }
+
+    function resetGame() {
+        showScreen('screen-setup');
+    }
+
+    function showScreen(id) {
+        ['screen-setup', 'screen-pass', 'screen-reveal', 'screen-game', 'screen-end'].forEach(s => document.getElementById(s).classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    // Snow
+    function createSnow() {
+        for(let i=0; i<30; i++) {
+            let s = document.createElement('div');
+            s.className = 'snowflake'; s.innerHTML = '❄';
+            s.style.left = Math.random()*100+'vw';
+            s.style.animationDuration = (Math.random()*5+3)+'s'; 
+            s.style.fontSize = (Math.random()*15+8)+'px';
+            document.body.appendChild(s);
+        }
+    }
+    createSnow();
+</script>
+
+</body>
+</html>

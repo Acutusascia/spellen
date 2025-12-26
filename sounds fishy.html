@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sounds Fishy - Ultimate Christmas Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --xmas-red: #b01c1e;
+            --xmas-dark-red: #6d0f11;
+            --xmas-green: #165b33;
+            --xmas-gold: #f8b229;
+            --xmas-gold-dark: #a8781a;
+            --text-light: #f0f4f8;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(rgba(60, 10, 10, 0.8), rgba(30, 50, 30, 0.8)), url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .snowflake {
+            position: absolute; top: -20px; color: rgba(255, 255, 255, 0.6); font-size: 1em;
+            animation: fall linear forwards; z-index: 1; pointer-events: none; filter: blur(1px);
+        }
+        @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
+
+        .container {
+            background: linear-gradient(145deg, rgba(180, 30, 50, 0.95), rgba(100, 20, 30, 0.98));
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 5px rgba(168, 120, 26, 0.5), inset 0 0 60px rgba(0,0,0,0.5);
+            border: 6px solid transparent;
+            border-image: linear-gradient(to bottom right, var(--xmas-gold), var(--xmas-gold-dark), var(--xmas-gold)) 1;
+            width: 95%; max-width: 1000px; padding: 50px 40px; z-index: 10;
+            text-align: center; position: relative; overflow: hidden; backdrop-filter: blur(5px);
+        }
+
+        .container::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 30px;
+            background-image: url('https://png.pngtree.com/png-clipart/20220923/original/pngtree-christmas-lights-png-image_8628400.png');
+            background-size: contain; background-repeat: repeat-x; opacity: 0.8;
+        }
+
+        h1 {
+            font-family: 'Mountains of Christmas', cursive; font-size: 4rem; margin: 0;
+            background: linear-gradient(to right, var(--xmas-gold), #fff, var(--xmas-gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5)); line-height: 1.2;
+        }
+        
+        h2 { color: var(--xmas-gold); margin-bottom: 15px; font-weight: 900; letter-spacing: 1px; }
+        h3 { color: rgba(255,255,255,0.8); font-weight: normal; margin-top: 0; }
+
+        .btn {
+            background: linear-gradient(to bottom, var(--xmas-red), var(--xmas-dark-red));
+            color: white; border: 3px solid var(--xmas-gold); padding: 15px 35px;
+            font-size: 1.3rem; border-radius: 50px; cursor: pointer; margin: 15px;
+            font-weight: 900; font-family: 'Nunito', sans-serif;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 2px 5px rgba(255,255,255,0.3);
+            transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn-gold { background: linear-gradient(to bottom, var(--xmas-gold), var(--xmas-gold-dark)); color: #4a3200; border-color: #fff9e6;}
+        .btn-green { background: linear-gradient(to bottom, #2a8f43, #165b33); border-color: #85e0a3; }
+        .btn-small { padding: 10px 20px; font-size: 1rem; margin: 5px;}
+        
+        /* Specifieke stijlen voor Difficulty Buttons */
+        .diff-btn { opacity: 0.6; transform: scale(0.9); }
+        .diff-btn.selected { opacity: 1; transform: scale(1.1); box-shadow: 0 0 20px var(--xmas-gold); border-color: #fff; }
+
+        .panel, .game-card {
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px);
+            padding: 25px; border-radius: 20px; border: 2px solid rgba(248, 178, 41, 0.3);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.05); flex: 1; min-width: 300px;
+        }
+        .setup-grid { display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; margin-top: 30px; text-align: left; }
+
+        input[type="text"] {
+            padding: 12px 20px; border-radius: 25px; border: none; width: 60%; font-size: 1.1rem;
+            background: rgba(255,255,255,0.9); box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .list-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2); padding: 12px 20px; margin: 8px 0; border-radius: 12px;
+            cursor: pointer; border: 2px solid transparent; transition: 0.2s; color: rgba(255,255,255,0.8); font-weight: 700;
+        }
+        .list-item.selected { 
+            background: linear-gradient(to right, var(--xmas-gold), var(--xmas-gold-dark)); 
+            color: #4a3200; box-shadow: 0 5px 15px rgba(248, 178, 41, 0.3); border-color: #fff;
+        }
+        .list-item:hover:not(.selected) { background: rgba(255,255,255,0.1); }
+
+        .game-card { margin: 30px 0; border: 4px dashed var(--xmas-gold); position: relative; background: rgba(255,255,255,0.15);}
+        .role-badge {
+            display: inline-block; padding: 8px 20px; border-radius: 30px; font-size: 1rem; font-weight: 900;
+            color: white; margin-bottom: 15px; text-transform: uppercase; box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        .bg-blue { background: linear-gradient(to right, #3498db, #2980b9); }
+        
+        .question-text { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 25px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); line-height: 1.3;}
+        .answer-box { 
+            background: linear-gradient(to bottom, #fff3cd, #ffeeba);
+            padding: 25px; border-radius: 15px; border: 3px solid var(--xmas-gold);
+            color: #856404; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .big-answer { font-size: 2.5rem; font-weight: 900; color: var(--xmas-red); display: block; margin-top: 10px; }
+
+        .hidden { display: none !important; }
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="container fade-in">
+    <div class="header">
+        <h1>Sounds Fishy</h1>
+        <h3>🎄 Familie Bijl Editie 🎄</h3>
+    </div>
+
+    <div id="screen-setup">
+        <div class="setup-grid">
+            <div class="panel">
+                <h2>1. Spelers</h2>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="playerNameInput" placeholder="Naam..." onkeydown="if(event.key==='Enter') addPlayer()">
+                    <button class="btn btn-green btn-small" style="margin:0;" onclick="addPlayer()">+</button>
+                </div>
+                <div id="playerList" style="margin-top:20px; max-height: 250px; overflow-y:auto; padding-right:5px;"></div>
+            </div>
+
+            <div class="panel" style="min-width: 250px;">
+                <h2>2. Niveau</h2>
+                <p style="font-size:0.9rem; color:#ddd;">Kies hoe slim de vissen zijn:</p>
+                <div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+                    <button class="btn btn-green diff-btn selected" id="btn-easy" onclick="setDifficulty('easy')">
+                        🙂 Normaal
+                    </button>
+                    <button class="btn btn-gold diff-btn" id="btn-hard" onclick="setDifficulty('hard')">
+                        🌶️ Expert
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>3. Onderwerpen</h2>
+                <div id="categoryList" style="max-height: 300px; overflow-y:auto; padding-right:5px;"></div>
+                <div style="margin-top:15px; display:flex; gap:10px;">
+                    <button class="btn btn-small" style="flex:1; margin:0; background:rgba(255,255,255,0.2); border:none;" onclick="toggleAllCats(true)">Alles</button>
+                    <button class="btn btn-small" style="flex:1; margin:0; background:rgba(255,255,255,0.2); border:none;" onclick="toggleAllCats(false)">Niets</button>
+                </div>
+            </div>
+        </div>
+        
+        <br>
+        <button class="btn" id="startBtn" onclick="startGame()">🎅 Start het Spel! 🎅</button>
+    </div>
+
+    <div id="screen-roles" class="hidden">
+        <h2 style="color:var(--xmas-gold); font-size:2.5rem;">⚠️ STOP! ⚠️</h2>
+        <div class="game-card">
+            <p style="font-size:1.4rem;">De Rader voor deze ronde is:</p>
+            <h1 id="currentGuesserName" style="font-size:5rem; margin: 20px 0;">...</h1>
+            <p style="font-size:1.2rem;"><strong><span id="currentGuesserName2">...</span></strong>, oren dicht en wegkijken!</p>
+        </div>
+        <p>Vissen, is de kust veilig?</p>
+        <button class="btn btn-green" onclick="showSecret()">Ja, laat antwoord zien</button>
+    </div>
+
+    <div id="screen-secret" class="hidden">
+        <span class="role-badge bg-blue" id="catTagSecret">Categorie</span>
+        <div class="game-card">
+            <p style="font-size:1.2rem;">De persoon die de <strong>WAARHEID</strong> moet spreken is:</p>
+            <h2 id="currentTruthTeller" style="font-family:'Mountains of Christmas'; font-size:4rem; color:var(--xmas-gold); text-shadow: 0 2px 5px rgba(0,0,0,0.5);">...</h2>
+            <hr style="border-top:2px dashed rgba(248, 178, 41, 0.5); margin: 25px 0;">
+            
+            <div class="question-text" id="secretQuestion">...</div>
+            
+            <div class="answer-box">
+                ANTWOORD:
+                <span class="big-answer" id="secretAnswer">...</span>
+            </div>
+        </div>
+        <p style="font-size:1.1rem;">🔴 De anderen verzinnen een leugen!<br>🔵 Alleen <span id="truthTellerNameSmall" style="font-weight:bold; color:var(--xmas-gold);">...</span> spreekt de waarheid.</p>
+        <button class="btn" onclick="startGuessing()">Verberg & Roep Rader</button>
+    </div>
+
+    <div id="screen-guessing" class="hidden">
+        <h2 style="font-size:2.5rem;">De Ondervraging</h2>
+        <div class="game-card">
+            <span class="role-badge bg-blue" id="catTagPublic">...</span>
+            <div class="question-text" id="publicQuestion" style="font-size:2.2rem;">...</div>
+        </div>
+        <p style="font-size:1.3rem;">Rader, ondervraag de groep! Wie is de echte vis?</p>
+        <button class="btn btn-gold" onclick="reveal()">🎁 Onthul het Antwoord! 🎁</button>
+    </div>
+
+    <div id="screen-result" class="hidden">
+        <h1 style="font-size:4.5rem;">🎉 Het Juiste Antwoord 🎉</h1>
+        <div class="game-card" style="border: 4px solid var(--xmas-gold); background: linear-gradient(to bottom, #fffbe6, #fff3cd);">
+            <div class="question-text" style="margin-bottom:10px; color:#856404; text-shadow:none; font-size:1.5rem;">Was...</div>
+            <div class="big-answer" style="font-size:3.5rem; color:var(--xmas-red);" id="finalAnswer">...</div>
+        </div>
+        <p style="font-size:1.3rem;">Had de Rader het goed? Deel de punten uit!</p>
+        <div style="display:flex; justify-content: center; gap: 20px;">
+            <button class="btn btn-green" onclick="nextRound()">Volgende Ronde ➡️</button>
+            <button class="btn btn-gold" onclick="location.reload()">Stoppen</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* ================= DATA ================= */
+    // Structuur: categories -> key -> { name, easy: [], hard: [] }
+    const categories = {
+        "kerst": { 
+            name: "🎅 Kerst Special", 
+            easy: [
+                {q: "Welk land schonk de kerstboom op Trafalgar Square?", a: "Noorwegen"},
+                {q: "Wat at men in Engeland vroeger ipv kalkoen?", a: "Varkenskop"},
+                {q: "Welk liedje was origineel voor Thanksgiving?", a: "Jingle Bells"},
+                {q: "Hoeveel rendieren heeft de kerstman (incl Rudolph)?", a: "Negen"},
+                {q: "Jaar van 'All I Want for Christmas is You'?", a: "1994"},
+                {q: "Wie bedacht het rode pak van de kerstman?", a: "Coca-Cola"},
+                {q: "Best verkochte kerstsingle aller tijden?", a: "White Christmas"},
+                {q: "Welk land eet KFC met kerst?", a: "Japan"},
+                {q: "Slechterik in Nightmare Before Christmas?", a: "Oogie Boogie"},
+                {q: "Dag na Eerste Kerstdag in Engeland?", a: "Boxing Day"},
+                {q: "Hoe heet de groene hater van Kerst?", a: "The Grinch"},
+                {q: "Welke kleur is de neus van Rudolph?", a: "Rood"},
+                {q: "Waar werd Jezus geboren?", a: "Bethlehem"},
+                {q: "Wat hang je in de boom?", a: "Kerstballen"},
+                {q: "Welke plant kus je onder?", a: "Maretak (Mistletoe)"},
+                {q: "Wie zong 'Last Christmas'?", a: "Wham!"},
+                {q: "Hoe heet de sneeuwpop met de hoed?", a: "Frosty"},
+                {q: "Wat laat je achter voor de kerstman?", a: "Melk en koekjes"},
+                {q: "In welke maand is Kerstmis?", a: "December"},
+                {q: "Wat voor vlees eten veel Amerikanen met Kerst?", a: "Kalkoen"},
+                {q: "Hoe heet de film over een jongen die alleen thuis is?", a: "Home Alone"},
+                {q: "Wat zetten kinderen in Nederland bij de haard?", a: "Hun schoen"},
+                {q: "Welk snoepgoed lijkt op een wandelstok?", a: "Zuurstok (Candy Cane)"},
+                {q: "Hoeveel dagen duurt de advent?", a: "24 (of 25)"},
+                {q: "Wat roept de kerstman?", a: "Ho Ho Ho"},
+                {q: "Welke engel bracht de boodschap aan Maria?", a: "Gabriël"},
+                {q: "Hoeveel koningen kwamen op bezoek?", a: "Drie"},
+                {q: "Wat brachten de wijzen mee (goud, wierook en...)?", a: "Mirre"},
+                {q: "In welk seizoen valt kerst in Australië?", a: "Zomer"},
+                {q: "Welk ballet hoort bij kerst?", a: "De Notenkraker"}
+            ],
+            hard: [
+                {q: "Welke president verbood kerstbomen in het Witte Huis?", a: "Teddy Roosevelt"},
+                {q: "Jaar van de eerste commerciële kerstkaart?", a: "1843"},
+                {q: "Naam van de demonische hulp van Sint Nicolaas?", a: "Krampus"},
+                {q: "Welk land hangt spinnenwebben in de boom?", a: "Oekraïne"},
+                {q: "Rendier met de naam van een planeet?", a: "Comet (of Vixen)"},
+                {q: "Eerste liedje vanuit de ruimte?", a: "Jingle Bells"},
+                {q: "Echte naam van 'Good King Wenceslas'?", a: "Hertog van Bohemen"},
+                {q: "Geboorteland van de historische Sint Nicolaas?", a: "Turkije"},
+                {q: "Wanneer werd 25 dec officieel vastgesteld?", a: "336 n.Chr"},
+                {q: "Hoeveel 'la's' in Deck the Halls (totaal)?", a: "96"},
+                {q: "Wie schreef 'A Christmas Carol'?", a: "Charles Dickens"},
+                {q: "Welke oorlog had een kerstbestand in 1914?", a: "Eerste Wereldoorlog"},
+                {q: "Waarvan werden de eerste kunstkerstbomen gemaakt?", a: "Ganzenveren"},
+                {q: "Wat betekent de naam 'Jezus'?", a: "God redt"},
+                {q: "Welk land geeft boeken op kerstavond (Jolabokaflod)?", a: "IJsland"},
+                {q: "Hoe heet de kerstman in Frankrijk?", a: "Père Noël"},
+                {q: "Welke plant wordt 'Ster van Bethlehem' genoemd?", a: "Kerstster (Poinsettia)"},
+                {q: "In welke film speelt Arnold Schwarzenegger een vader die een pop zoekt?", a: "Jingle All the Way"},
+                {q: "Wat is de best verkochte kerstfilm aller tijden?", a: "The Grinch (2018)"},
+                {q: "Welke staat in de VS verklaarde kerst als eerste tot feestdag?", a: "Alabama"},
+                {q: "Hoeveel punten heeft een sneeuwvlok altijd?", a: "Zes"},
+                {q: "Wie verbood kerst in Engeland in 1647?", a: "Oliver Cromwell"},
+                {q: "Wat is myrrhe precies?", a: "Boomhars"},
+                {q: "Welk bedrijf maakte Rudolph de Red-Nosed Reindeer bekend?", a: "Montgomery Ward"},
+                {q: "Hoe heet het brood dat Italianen eten met kerst?", a: "Panettone"},
+                {q: "Wat is de naam van de hond van de Grinch?", a: "Max"},
+                {q: "Welke zanger zong 'Driving Home for Christmas'?", a: "Chris Rea"},
+                {q: "In welk jaar speelde de film 'White Christmas'?", a: "1954"},
+                {q: "Hoeveel geesten bezoeken Scrooge?", a: "Vier (Marley + 3 kerstgeesten)"},
+                {q: "Welke stad exporteert de meeste kerstbomen?", a: "Nova Scotia (Canada)"}
+            ]
+        },
+        "natuur": { 
+            name: "🌿 Natuur", 
+            easy: [
+                { q: "Wat doen otters als ze slapen?", a: "Handjes vasthouden" },
+                { q: "Dier met drollen als een kubus?", a: "Wombat" },
+                { q: "Kleur zweet nijlpaard?", a: "Rood" },
+                { q: "Aantal magen koe?", a: "Vier" },
+                { q: "Dier dat niet kan springen?", a: "Olifant" },
+                { q: "Waar proeven vlinders mee?", a: "Voeten" },
+                { q: "Luidste dier?", a: "Potvis" },
+                { q: "Dier met groen bloed?", a: "Zeeworm" },
+                { q: "Aantal neuzen slak?", a: "Vier" },
+                { q: "Zoogdier dat vliegt?", a: "Vleermuis" },
+                { q: "Wat eten panda's?", a: "Bamboe" },
+                { q: "Snelste landdier?", a: "Cheeta" },
+                { q: "Grootste dier?", a: "Blauwe Vinvis" },
+                { q: "Koning der dieren?", a: "Leeuw" },
+                { q: "Dier met bulten?", a: "Kameel" },
+                { q: "Wat is een kikkervisje?", a: "Baby kikker" },
+                { q: "Welke vogel kan praten?", a: "Papegaai" },
+                { q: "Heeft een zebra wit met zwarte strepen of andersom?", a: "Zwart met wit" },
+                { q: "Wat verliezen herten elk jaar?", a: "Hun gewei" },
+                { q: "Hoeveel poten heeft een insect?", a: "Zes" },
+                { q: "Welk dier maakt dammen?", a: "Bever" },
+                { q: "Welk dier stoot inkt uit?", a: "Inktvis" },
+                { q: "Traagste dier?", a: "Luiaard" },
+                { q: "Dier met een buidel?", a: "Kangoeroe" },
+                { q: "Welke vogel legt de grootste eieren?", a: "Struisvogel" },
+                { q: "Wat eten koala's?", a: "Eucalyptus" },
+                { q: "Welk dier kan van kleur veranderen?", a: "Kameleon" },
+                { q: "Hoeveel poten heeft een spin?", a: "Acht" },
+                { q: "Welk dier slaapt staand?", a: "Paard" },
+                { q: "Welke vogel staat op één been?", a: "Flamingo" }
+            ],
+            hard: [
+                { q: "Dodelijkste dier ter wereld?", a: "De Mug" },
+                { q: "Angst voor bomen?", a: "Dendrofobie" },
+                { q: "Dier met grootste ogen vs kop?", a: "Spookdiertje" },
+                { q: "Hoe oud wordt een Groenlandse haai?", a: "400+ jaar" },
+                { q: "Vogel die blauw ziet?", a: "Uil" },
+                { q: "Dier zonder stembanden?", a: "Giraffe" },
+                { q: "Naam voor de mens?", a: "Homo Sapiens" },
+                { q: "Zoogdier dat eieren legt?", a: "Vogelbekdier" },
+                { q: "Harten regenworm?", a: "Vijf" },
+                { q: "Kleur tong chowchow?", a: "Blauw/Zwart" },
+                { q: "Sterkste beet?", a: "Zoutwaterkrokodil" },
+                { q: "Groep leeuwen?", a: "Troep" },
+                { q: "Zoogdier met schubben?", a: "Schubdier" },
+                { q: "Draagtijd olifant?", a: "22 maanden" },
+                { q: "Vogel die achteruit vliegt?", a: "Kolibrie" },
+                { q: "Snelste zeedier?", a: "Zeilvis" },
+                { q: "Poten van een kreeft?", a: "Tien" },
+                { q: "Dier met rechthoekige pupillen?", a: "Geit" },
+                { q: "Dodelijkste dier Afrika?", a: "Nijlpaard" },
+                { q: "Mannelijke eend?", a: "Woerd" },
+                { q: "Hoeveel nekwervels heeft een giraffe?", a: "Zeven (net als de mens)" },
+                { q: "Welk dier slaapt 22 uur per dag?", a: "Koala" },
+                { q: "Hoeveel ogen heeft een bij?", a: "Vijf" },
+                { q: "Welke haai kan in zoet water leven?", a: "Stierhaai" },
+                { q: "Wat is het grootste landroofdier?", a: "IJsbeer" },
+                { q: "Welk dier heeft de hoogste bloeddruk?", a: "Giraffe" },
+                { q: "Welke vogel kan niet lopen?", a: "Gierzwaluw" },
+                { q: "Wat is het enige onsterfelijke dier?", a: "Een soort kwal" },
+                { q: "Hoeveel tanden kan een haai verliezen in zijn leven?", a: "30.000" },
+                { q: "Welk dier heeft 32 hersenen?", a: "Bloedzuiger" }
+            ]
+        },
+        "geschiedenis": { 
+            name: "📜 Geschiedenis", 
+            easy: [
+                { q: "Kortste oorlog?", a: "38 minuten" },
+                { q: "Kettingzaag uitgevonden voor?", a: "Bevallingen" },
+                { q: "Eerste Disney prinses?", a: "Sneeuwwitje" },
+                { q: "Eerste magnetron voedsel?", a: "Popcorn" },
+                { q: "Romeins mondwater?", a: "Urine" },
+                { q: "Kleur wortels vroeger?", a: "Paars" },
+                { q: "Oude naam New York?", a: "Nieuw-Amsterdam" },
+                { q: "Eerste smaak kauwgom?", a: "Sparrenhars" },
+                { q: "Schilder Mona Lisa?", a: "Da Vinci" },
+                { q: "Eerste item McDonald's?", a: "Hotdogs" },
+                { q: "Jaar maanlanding?", a: "1969" },
+                { q: "Wie ontdekte Amerika?", a: "Columbus" },
+                { q: "Beroemd dagboek WO2?", a: "Anne Frank" },
+                { q: "Schip gezonken in 1912?", a: "Titanic" },
+                { q: "Oude Egyptische koningen?", a: "Farao's" },
+                { q: "Waar stond de muur?", a: "Berlijn" },
+                { q: "Eerste president VS?", a: "George Washington" },
+                { q: "Uitvinder gloeilamp?", a: "Edison" },
+                { q: "Oorsprong Olympische Spelen?", a: "Griekenland" },
+                { q: "Stad van Romeo & Julia?", a: "Verona" },
+                { q: "Wie werd in een mandje op de Nijl gevonden?", a: "Mozes" },
+                { q: "Wie schilderde de Nachtwacht?", a: "Rembrandt" },
+                { q: "Vrouw op de bezem?", a: "Heks" },
+                { q: "Wapen van een ridder?", a: "Zwaard" },
+                { q: "Kasteel in Parijs (nu museum)?", a: "Louvre" },
+                { q: "Welk dier verspreidde de pest?", a: "Rat (vlo)" },
+                { q: "God van de donder?", a: "Thor (of Zeus)" },
+                { q: "Wie verloor haar glazen muiltje?", a: "Assepoester" },
+                { q: "Hoofdstad Romeinse Rijk?", a: "Rome" },
+                { q: "Waar woonden de Vikingen?", a: "Scandinavië" }
+            ],
+            hard: [
+                { q: "Jaar val Berlijnse muur?", a: "1989" },
+                { q: "Laatste Farao?", a: "Cleopatra" },
+                { q: "Paard Alexander de Grote?", a: "Bucephalus" },
+                { q: "Stad verwoest door Vesuvius?", a: "Pompeii" },
+                { q: "Eerste vrouw in de ruimte?", a: "Valentina Tereshkova" },
+                { q: "Eerste land vrouwenkiesrecht?", a: "Nieuw-Zeeland" },
+                { q: "Hond in de ruimte?", a: "Laika" },
+                { q: "Oorlog 1337-1453?", a: "Honderdjarige Oorlog" },
+                { q: "Schrijver Communistisch Manifest?", a: "Karl Marx" },
+                { q: "Uitvinder papiergeld?", a: "China" },
+                { q: "Hoe heette de bom op Hiroshima?", a: "Little Boy" },
+                { q: "Wie was de Zonnekoning?", a: "Lodewijk XIV" },
+                { q: "Welk jaar begon WO2?", a: "1939" },
+                { q: "Hoeveel vrouwen had Hendrik VIII?", a: "Zes" },
+                { q: "Wie ontdekte Penicilline?", a: "Alexander Fleming" },
+                { q: "In welk jaar zonk de Titanic?", a: "1912" },
+                { q: "Wie was de eerste man in de ruimte?", a: "Joeri Gagarin" },
+                { q: "Welke beschaving bouwde Machu Picchu?", a: "Inca's" },
+                { q: "Wie schilderde de zonnebloemen?", a: "Van Gogh" },
+                { q: "De veroveraar van Gallië?", a: "Julius Caesar" },
+                { q: "Eerste bondskanselier Duitsland?", a: "Konrad Adenauer" },
+                { q: "Slag bij Waterloo jaar?", a: "1815" },
+                { q: "Wie vermoordde John F. Kennedy?", a: "Lee Harvey Oswald" },
+                { q: "Welk land was Formosa?", a: "Taiwan" },
+                { q: "Godin van de jacht?", a: "Artemis (Diana)" },
+                { q: "Wie bevrijdde India geweldloos?", a: "Gandhi" },
+                { q: "De IJzeren Dame (politiek)?", a: "Margaret Thatcher" },
+                { q: "Eerste dier gekloond?", a: "Schaap (Dolly)" },
+                { q: "Welk jaar stierf Elvis?", a: "1977" },
+                { q: "Hoofdstad van het Aztekenrijk?", a: "Tenochtitlan" }
+            ]
+        },
+        "wetenschap": { 
+            name: "🧪 Wetenschap", 
+            easy: [
+                { q: "Hardste materiaal lichaam?", a: "Tandglazuur" },
+                { q: "Radioactief fruit?", a: "Banaan" },
+                { q: "Regen op Saturnus?", a: "Diamanten" },
+                { q: "Botten van een haai?", a: "Nul" },
+                { q: "Vloeibaar metaal?", a: "Kwik" },
+                { q: "Groeit sneller: vinger/teen nagels?", a: "Vingernagels" },
+                { q: "Land meeste tijdzones?", a: "Frankrijk" },
+                { q: "Wat is de cloud?", a: "Andermans computer" },
+                { q: "Warmste planeet?", a: "Venus" },
+                { q: "Droogijs is?", a: "Bevroren CO2" },
+                { q: "Aantal planeten?", a: "Acht" },
+                { q: "Wat is H2O?", a: "Water" },
+                { q: "Snelheid licht?", a: "300.000 km/s" },
+                { q: "Uitvinder zwaartekrachttheorie?", a: "Newton" },
+                { q: "Rode planeet?", a: "Mars" },
+                { q: "Wat ademen wij in?", a: "Zuurstof" },
+                { q: "Wat ademen wij uit?", a: "CO2" },
+                { q: "Kleuren regenboog?", a: "Zeven" },
+                { q: "Thermometer meet?", a: "Temperatuur" },
+                { q: "Wat trekt ijzer aan?", a: "Magneet" },
+                { q: "Grootste orgaan?", a: "De huid" },
+                { q: "Deense bouwsteentjes?", a: "Lego" },
+                { q: "Centrum zonnestelsel?", a: "Zon" },
+                { q: "Bevroren water heet?", a: "IJs" },
+                { q: "Kokend water graden?", a: "100" },
+                { q: "Waarmee hoor je?", a: "Oren" },
+                { q: "Wat pompt bloed?", a: "Hart" },
+                { q: "Welk gas in ballonnen?", a: "Helium" },
+                { q: "Wie vond de telefoon uit?", a: "Bell" },
+                { q: "Hoeveel tanden (volwassen)?", a: "32" }
+            ],
+            hard: [
+                { q: "Zwaarste natuurlijke element?", a: "Uranium" },
+                { q: "Meest voorkomend gas lucht?", a: "Stikstof" },
+                { q: "Aantal chromosomen mens?", a: "46" },
+                { q: "Formule tafelzout?", a: "NaCl" },
+                { q: "Relativiteitstheorie?", a: "Einstein" },
+                { q: "Snelheid geluid?", a: "343 m/s" },
+                { q: "Universele donor?", a: "O Negatief" },
+                { q: "Kleinste botje?", a: "Stijgbeugel" },
+                { q: "Planeet meeste manen?", a: "Saturnus" },
+                { q: "Absolute nulpunt?", a: "-273,15 °C" },
+                { q: "Wie ontdekte radioactiviteit?", a: "Marie Curie" },
+                { q: "Symbool voor Goud?", a: "Au" },
+                { q: "Wat is de krachtcentrale van de cel?", a: "Mitochondriën" },
+                { q: "Dichtstbijzijnde ster (na zon)?", a: "Proxima Centauri" },
+                { q: "pH-waarde van water?", a: "7 (Neutraal)" },
+                { q: "Grootste bot in lichaam?", a: "Dijbeen" },
+                { q: "Welk metaal roest?", a: "IJzer" },
+                { q: "Wat is de 4e fase van materie?", a: "Plasma" },
+                { q: "Wie bedacht de evolutietheorie?", a: "Darwin" },
+                { q: "Wat meet een Geigerteller?", a: "Straling" },
+                { q: "Hardste mineraal?", a: "Diamant" },
+                { q: "Welk element is 'O'?", a: "Zuurstof" },
+                { q: "Hoe oud is de aarde?", a: "4,5 miljard jaar" },
+                { q: "Lichtste element?", a: "Waterstof" },
+                { q: "Wat bestudeert een mycoloog?", a: "Schimmels" },
+                { q: "Wat is 'zwaar water'?", a: "Deuteriumoxide" },
+                { q: "Welke planeet ligt op zijn zij?", a: "Uranus" },
+                { q: "Hoeveel longkwabben rechts?", a: "Drie" },
+                { q: "Wie vond wifi uit (deels)?", a: "Hedy Lamarr" },
+                { q: "Wat is de snelheid van zwaartekracht?", a: "Lichtsnelheid" }
+            ]
+        },
+        "eten": { 
+            name: "🍕 Eten & Drinken", 
+            easy: [
+                { q: "Wat bederft nooit?", a: "Honing" },
+                { q: "Oorsprong pizza?", a: "Napels" },
+                { q: "Pinda is een...?", a: "Peulvrucht" },
+                { q: "Duurste kruid?", a: "Saffraan" },
+                { q: "Dier mozzarella?", a: "Waterbuffel" },
+                { q: "Ingrediënt hummus?", a: "Kikkererwten" },
+                { q: "Meest gegeten groente?", a: "Aardappel" },
+                { q: "Zon vitamine?", a: "Vitamine D" },
+                { q: "Drank Rusland?", a: "Vodka" },
+                { q: "Ketchup vroeger?", a: "Medicijn" },
+                { q: "Populairste fruit?", a: "Tomaat" },
+                { q: "Chocola komt van?", a: "Cacaoboon" },
+                { q: "Land meeste koffie?", a: "Brazilië" },
+                { q: "Inhoud hotdog?", a: "Worstje" },
+                { q: "Sushi land?", a: "Japan" },
+                { q: "Basis brood?", a: "Meel/Bloem" },
+                { q: "Kleur citroen?", a: "Geel" },
+                { q: "Gouda kaas land?", a: "Nederland" },
+                { q: "Pineapple is?", a: "Ananas" },
+                { q: "Zoetste stof?", a: "Stevia" },
+                { q: "Wat is friet?", a: "Gefrituurde aardappel" },
+                { q: "Drank uit koe?", a: "Melk" },
+                { q: "Kleur van wijn?", a: "Rood/Wit/Rosé" },
+                { q: "Wat eten muizen?", a: "Kaas" },
+                { q: "Groente van Popeye?", a: "Spinazie" },
+                { q: "Wat legt een kip?", a: "Ei" },
+                { q: "Ontbijt met melk?", a: "Cornflakes/Havermout" },
+                { q: "Oranje groente?", a: "Wortel" },
+                { q: "Wat is een tosti?", a: "Gegrild broodje kaas" },
+                { q: "Wat zit in een flesje cola?", a: "Frisdrank" }
+            ],
+            hard: [
+                { q: "Fruit zaden buitenkant?", a: "Aardbei" },
+                { q: "Grootste koffieproducent?", a: "Brazilië" },
+                { q: "Duurste paddenstoel?", a: "Witte Truffel" },
+                { q: "Betekenis Sake?", a: "Alcohol" },
+                { q: "Drank door monniken?", a: "Bier" },
+                { q: "Ingrediënt Worcestershire?", a: "Ansjovis" },
+                { q: "Eerste groente in ruimte?", a: "Aardappel" },
+                { q: "Hete stof pepers?", a: "Capsaïcine" },
+                { q: "Meeste chocola per hoofd?", a: "Zwitserland" },
+                { q: "Bloem van vanille?", a: "Orchidee" },
+                { q: "Wat is tofu?", a: "Gestremde sojamelk" },
+                { q: "Wat is het duurste vlees?", a: "Wagyu" },
+                { q: "Welk land eet de meeste pasta?", a: "Italië" },
+                { q: "Wat is scampi?", a: "Kreeftje" },
+                { q: "Wat is de nationale drank van Schotland?", a: "Whisky" },
+                { q: "Welke vitamine zit in citrus?", a: "Vitamine C" },
+                { q: "Waar komt de hamburger vandaan?", a: "Duitsland (Hamburg)" },
+                { q: "Wat is gluten?", a: "Eiwit in graan" },
+                { q: "Wat is de giftige vis in Japan?", a: "Fugu (Kogelvis)" },
+                { q: "Welke noot zit in marsepein?", a: "Amandel" },
+                { q: "Wat is het hoofdingrediënt van bier?", a: "Water (en mout)" },
+                { q: "Hoe heet gedroogde druif?", a: "Rozijn" },
+                { q: "Wat is een Granny Smith?", a: "Appel" },
+                { q: "Waar komt thee oorspronkelijk vandaan?", a: "China" },
+                { q: "Wat is Agar Agar?", a: "Plantaardige gelatine" },
+                { q: "Welk land bedacht Franse Frietjes?", a: "België" },
+                { q: "Duurste koffie (uit poep)?", a: "Kopi Luwak" },
+                { q: "Wat is de smaak Umami?", a: "Hartig" },
+                { q: "Wat zit er in een mojito?", a: "Rum, Munt, Limoen" },
+                { q: "Waarvan wordt rum gemaakt?", a: "Suikerriet" }
+            ]
+        },
+        "muziek60": { 
+            name: "🎸 Muziek Jaren 60", 
+            easy: [
+                { q: "Zanger Jailhouse Rock?", a: "Elvis Presley" },
+                { q: "Band John, Paul, George, Ringo?", a: "The Beatles" },
+                { q: "Festival 1969?", a: "Woodstock" },
+                { q: "Zangeres Respect?", a: "Aretha Franklin" },
+                { q: "Band Paint It Black?", a: "Rolling Stones" },
+                { q: "Zanger Space Oddity?", a: "David Bowie" },
+                { q: "King of Pop (Jackson 5)?", a: "Michael Jackson" },
+                { q: "Beatles straat?", a: "Penny Lane" },
+                { q: "Zanger Ring of Fire?", a: "Johnny Cash" },
+                { q: "Band Good Vibrations?", a: "Beach Boys" },
+                { q: "Zanger My Generation?", a: "The Who" },
+                { q: "Zangeres Bobby McGee?", a: "Janis Joplin" },
+                { q: "Gitaar met tanden?", a: "Jimi Hendrix" },
+                { q: "Band Light My Fire?", a: "The Doors" },
+                { q: "Zanger Wonderful World?", a: "Louis Armstrong" },
+                { q: "Bijnaam Little Sparrow?", a: "Edith Piaf" },
+                { q: "Boots Made for Walkin?", a: "Nancy Sinatra" },
+                { q: "California Dreamin?", a: "Mamas & Papas" },
+                { q: "Suspicious Minds?", a: "Elvis" },
+                { q: "Whiter Shade of Pale?", a: "Procol Harum" },
+                { q: "I Got You (I Feel Good)?", a: "James Brown" },
+                { q: "Mrs. Robinson?", a: "Simon & Garfunkel" },
+                { q: "Stand By Me?", a: "Ben E. King" },
+                { q: "Bad Moon Rising?", a: "CCR" },
+                { q: "Son of a Preacher Man?", a: "Dusty Springfield" },
+                { q: "Happy Together?", a: "The Turtles" },
+                { q: "Sweet Caroline?", a: "Neil Diamond" },
+                { q: "Hey Jude?", a: "The Beatles" },
+                { q: "Unchained Melody?", a: "Righteous Brothers" },
+                { q: "Piece of My Heart?", a: "Janis Joplin" }
+            ],
+            hard: [
+                { q: "Originele drummer Beatles?", a: "Pete Best" },
+                { q: "Jaar 'Music died'?", a: "1959" },
+                { q: "Echte naam Bob Dylan?", a: "Robert Zimmerman" },
+                { q: "Band rockopera Tommy?", a: "The Who" },
+                { q: "Zangeres Goldfinger?", a: "Shirley Bassey" },
+                { q: "Instrument Ravi Shankar?", a: "Sitar" },
+                { q: "Schrijver Grapevine?", a: "Norman Whitfield" },
+                { q: "Studio van Elvis?", a: "Sun Studio" },
+                { q: "Gitaar in brand Monterey?", a: "Jimi Hendrix" },
+                { q: "Zangeres Jefferson Airplane?", a: "Grace Slick" },
+                { q: "Wie zong 'White Rabbit'?", a: "Jefferson Airplane" },
+                { q: "Welk jaar stopten The Beatles?", a: "1970" },
+                { q: "Wie is 'The Walrus'?", a: "John Lennon" },
+                { q: "Welk label hoort bij Motown?", a: "Detroit" },
+                { q: "Zanger van The Doors?", a: "Jim Morrison" },
+                { q: "Welk nummer duurt 17 minuten?", a: "In-A-Gadda-Da-Vida" },
+                { q: "Wie was de 5e Beatle (producer)?", a: "George Martin" },
+                { q: "Welk album heeft een banaan?", a: "Velvet Underground" },
+                { q: "Wie zong 'Like a Rolling Stone'?", a: "Bob Dylan" },
+                { q: "De 'Godfather of Soul'?", a: "James Brown" },
+                { q: "Wie schreef 'Hallelujah'?", a: "Leonard Cohen" },
+                { q: "Eerste hit The Kinks?", a: "You Really Got Me" },
+                { q: "Zangeres van The Supremes?", a: "Diana Ross" },
+                { q: "Welke band sloeg hun instrumenten kapot?", a: "The Who" },
+                { q: "Wie zong 'Feeling Good'?", a: "Nina Simone" },
+                { q: "Naam gitaar B.B. King?", a: "Lucille" },
+                { q: "Festival vóór Woodstock?", a: "Monterey Pop" },
+                { q: "Manager van The Beatles?", a: "Brian Epstein" },
+                { q: "Echte naam David Bowie?", a: "David Jones" },
+                { q: "Wie zong 'Sittin' on the Dock of the Bay'?", a: "Otis Redding" }
+            ]
+        },
+        "kinderen": { 
+            name: "🧸 Kinderen (9 jaar)", 
+            easy: [
+                { q: "Sneeuwpop Frozen?", a: "Olaf" },
+                { q: "Dier SpongeBob?", a: "Spons" },
+                { q: "Spel met blokken?", a: "Minecraft" },
+                { q: "Dagen in week?", a: "Zeven" },
+                { q: "Kleur smurf?", a: "Blauw" },
+                { q: "Dier zegt boe?", a: "Koe" },
+                { q: "Cowboy Toy Story?", a: "Woody" },
+                { q: "5 plus 5?", a: "Tien" },
+                { q: "Na winter komt?", a: "Lente" },
+                { q: "Vis zoekt vader?", a: "Nemo" },
+                { q: "Tanden poetsen met?", a: "Tandenborstel" },
+                { q: "Rood + Geel?", a: "Oranje" },
+                { q: "Koning leeuwen?", a: "Simba" },
+                { q: "Wat doe je met boek?", a: "Lezen" },
+                { q: "Wielen fiets?", a: "Twee" },
+                { q: "Niet warm maar?", a: "Koud" },
+                { q: "Dier lange slurf?", a: "Olifant" },
+                { q: "Stad Batman?", a: "Gotham" },
+                { q: "Uil Harry Potter?", a: "Hedwig" },
+                { q: "Op hoofd Sinterklaas?", a: "Mijter" },
+                { q: "Poten hond?", a: "Vier" },
+                { q: "Uit de kraan?", a: "Water" },
+                { q: "Lang geel fruit?", a: "Banaan" },
+                { q: "Broer Mario?", a: "Luigi" },
+                { q: "Soep eten met?", a: "Lepel" },
+                { q: "Wie legt eieren?", a: "Kip" },
+                { q: "Kleur gras?", a: "Groen" },
+                { q: "Vriendin Mickey?", a: "Minnie" },
+                { q: "Hoofdstad Nederland?", a: "Amsterdam" },
+                { q: "Tenen per voet?", a: "Vijf" }
+            ],
+            hard: [
+                { q: "Krab Kleine Zeemeermin?", a: "Sebastiaan" },
+                { q: "Planeet dichtst bij zon?", a: "Mercurius" },
+                { q: "Slechterik Harry Potter?", a: "Voldemort" },
+                { q: "Hoofdstad Frankrijk?", a: "Parijs" },
+                { q: "Poten spin?", a: "Acht" },
+                { q: "Schrijver Sjakie?", a: "Roald Dahl" },
+                { q: "Auto Cars?", a: "Bliksem McQueen" },
+                { q: "Grootste zoogdier?", a: "Blauwe Vinvis" },
+                { q: "Minuten in kwartier?", a: "15" },
+                { q: "Blauw + Geel?", a: "Groen" },
+                { q: "Vrouw van Shrek?", a: "Fiona" },
+                { q: "Hoeveel werelddelen?", a: "Zeven" },
+                { q: "Wie woont in ananas?", a: "SpongeBob" },
+                { q: "Hoogste berg?", a: "Mount Everest" },
+                { q: "Directeur Zweinstein?", a: "Perkamentus" },
+                { q: "Vogel die niet vliegt?", a: "Pinguïn" },
+                { q: "Aantal provincies NL?", a: "Twaalf" },
+                { q: "Pokemon geel?", a: "Pikachu" },
+                { q: "Wie stal de maan?", a: "Gru (Verschrikkelijke Ikke)" },
+                { q: "Wat eten vegetariërs niet?", a: "Vlees" },
+                { q: "Welk land is een laars?", a: "Italië" },
+                { q: "Hoe heet de baby van Simba?", a: "Kiara" },
+                { q: "Wat is 3 keer 7?", a: "21" },
+                { q: "Wie is de broer van Thor?", a: "Loki" },
+                { q: "Wat is de zon?", a: "Een ster" },
+                { q: "Varkentje met modder?", a: "Peppa Big" },
+                { q: "Hond van Kuifje?", a: "Bobbie" },
+                { q: "Kleur smaragd?", a: "Groen" },
+                { q: "Wat wordt een rups?", a: "Vlinder" },
+                { q: "Wie vond de lamp uit?", a: "Edison" }
+            ]
+        },
+        "autos": { 
+            name: "🚗 Auto's", 
+            easy: [
+                { q: "Betekenis BMW?", a: "Bayerische Motoren Werke" },
+                { q: "Merk met paard?", a: "Ferrari" },
+                { q: "Snelste auto?", a: "Bugatti" },
+                { q: "Land Volvo?", a: "Zweden" },
+                { q: "Volkswagen betekent?", a: "Auto voor volk" },
+                { q: "Merk 911?", a: "Porsche" },
+                { q: "Kleur Ferrari?", a: "Rood" },
+                { q: "Vier ringen?", a: "Audi" },
+                { q: "Auto Knight Rider?", a: "KITT" },
+                { q: "Merk Mustang?", a: "Ford" },
+                { q: "Auto James Bond?", a: "Aston Martin" },
+                { q: "Merk met ster?", a: "Mercedes" },
+                { q: "Benzine + Elektro?", a: "Hybride" },
+                { q: "Land Toyota?", a: "Japan" },
+                { q: "Merk Golf?", a: "Volkswagen" },
+                { q: "APK staat voor?", a: "Alg. Periodieke Keuring" },
+                { q: "Leeuw logo?", a: "Peugeot" },
+                { q: "Duurste merk?", a: "Rolls-Royce" },
+                { q: "Merk 500?", a: "Fiat" },
+                { q: "Wielen Reliant Robin?", a: "Drie" },
+                { q: "Merk Civic?", a: "Honda" },
+                { q: "Bijnaam 2CV?", a: "Lelijke Eend" },
+                { q: "Merk Model S?", a: "Tesla" },
+                { q: "Land Hyundai?", a: "Zuid-Korea" },
+                { q: "Twee chevrons?", a: "Citroën" },
+                { q: "Auto open dak?", a: "Cabriolet" },
+                { q: "Merk Mini Cooper?", a: "Mini" },
+                { q: "Hoogste klasse race?", a: "Formule 1" },
+                { q: "Merk Corvette?", a: "Chevrolet" },
+                { q: "Glijden op water?", a: "Aquaplaning" }
+            ],
+            hard: [
+                { q: "Oprichter Tesla?", a: "Martin Eberhard" },
+                { q: "Beeldje Rolls Royce?", a: "Spirit of Ecstasy" },
+                { q: "Merk Traction Avant?", a: "Citroën" },
+                { q: "GTI staat voor?", a: "Grand Tourer Injection" },
+                { q: "Jaar eerste auto?", a: "1886" },
+                { q: "Slang in logo?", a: "Alfa Romeo" },
+                { q: "Best verkochte auto ooit?", a: "Toyota Corolla" },
+                { q: "De S in Model S?", a: "Sedan" },
+                { q: "Slogan Ultimate Driving?", a: "BMW" },
+                { q: "Motorinhoud 2CV?", a: "375cc" },
+                { q: "Duurste auto ooit geveild?", a: "Mercedes 300 SLR" },
+                { q: "Land merk Skoda?", a: "Tsjechië" },
+                { q: "Waar staat FIAT voor?", a: "Fabbrica Italiana..." },
+                { q: "Eerste auto in massa?", a: "Ford Model T" },
+                { q: "Auto in Back to the Future?", a: "DeLorean" },
+                { q: "Merk met stier?", a: "Lamborghini" },
+                { q: "Eigenaar van Bugatti?", a: "Rimac (voorheen VW)" },
+                { q: "Kleur Britse raceauto's?", a: "British Racing Green" },
+                { q: "Aantal cilinders V8?", a: "Acht" },
+                { q: "Merk kever?", a: "Volkswagen" },
+                { q: "Snelheidsrecord op land?", a: "ThrustSSC" },
+                { q: "Land merk Koenigsegg?", a: "Zweden" },
+                { q: "Waar staat SUV voor?", a: "Sports Utility Vehicle" },
+                { q: "Merk met drietand?", a: "Maserati" },
+                { q: "Merk Supra?", a: "Toyota" },
+                { q: "Auto Mr. Bean?", a: "Mini" },
+                { q: "Luxe merk van Toyota?", a: "Lexus" },
+                { q: "Luxe merk van Nissan?", a: "Infiniti" },
+                { q: "Wat is een V12?", a: "Motor met 12 cilinders" },
+                { q: "Merk Viper?", a: "Dodge" }
+            ]
+        },
+        "dieren": { 
+            name: "🐾 Dieren", 
+            easy: [
+                { q: "Snelste landdier?", a: "Cheeta" },
+                { q: "Slaapt staand?", a: "Paard" },
+                { q: "Grootste dier?", a: "Blauwe Vinvis" },
+                { q: "Poten spin?", a: "Acht" },
+                { q: "Langste nek?", a: "Giraffe" },
+                { q: "Eten panda?", a: "Bamboe" },
+                { q: "Vogel rent hard?", a: "Struisvogel" },
+                { q: "Jong van kat?", a: "Kitten" },
+                { q: "Bouwt dammen?", a: "Bever" },
+                { q: "Heeft buidel?", a: "Kangoeroe" },
+                { q: "Koning jungle?", a: "Leeuw" },
+                { q: "Verandert kleur?", a: "Kameleon" },
+                { q: "Harten octopus?", a: "Drie" },
+                { q: "Goed geheugen?", a: "Olifant" },
+                { q: "Langzaamste dier?", a: "Luiaard" },
+                { q: "Pratende vogel?", a: "Papegaai" },
+                { q: "Groep vissen?", a: "School" },
+                { q: "Heeft strepen?", a: "Zebra" },
+                { q: "Doet winterslaap?", a: "Beer" },
+                { q: "Maakt honing?", a: "Bij" },
+                { q: "Poten insect?", a: "Zes" },
+                { q: "Wie is Bambi?", a: "Hert" },
+                { q: "Kleinste vogel?", a: "Kolibrie" },
+                { q: "Spuit inkt?", a: "Inktvis" },
+                { q: "Geluid hond?", a: "Blaffen" },
+                { q: "Bulten op rug?", a: "Kameel" },
+                { q: "Leeft Noordpool?", a: "IJsbeer" },
+                { q: "Leeft Zuidpool?", a: "Pinguïn" },
+                { q: "Kikkervisje is?", a: "Baby kikker" },
+                { q: "Rolt op als bal?", a: "Egel" }
+            ],
+            hard: [
+                { q: "Sterkste beet?", a: "Krokodil" },
+                { q: "Groep leeuwen?", a: "Troep" },
+                { q: "Zoogdier schubben?", a: "Schubdier" },
+                { q: "Draagtijd olifant?", a: "22 maanden" },
+                { q: "Vogel achteruit?", a: "Kolibrie" },
+                { q: "Snelste zeedier?", a: "Zeilvis" },
+                { q: "Poten kreeft?", a: "Tien" },
+                { q: "Rechthoekige pupillen?", a: "Geit" },
+                { q: "Dodelijkste Afrika?", a: "Nijlpaard" },
+                { q: "Man eend?", a: "Woerd" },
+                { q: "Enige vogel die zwemt maar niet vliegt?", a: "Pinguïn (of Struisvogel/loopvogel)" },
+                { q: "Welk dier heeft blauw bloed?", a: "Octopus" },
+                { q: "Grootste katachtige?", a: "Tijger" },
+                { q: "Heeft een ijsbeer een witte huid?", a: "Nee, zwart" },
+                { q: "Snelste vogel (duikvlucht)?", a: "Slechtvalk" },
+                { q: "Hoeveel magen heeft een kameel?", a: "Drie" },
+                { q: "Wat is een orka?", a: "Dolfijn" },
+                { q: "Welk dier proeft met poten?", a: "Vlinder" },
+                { q: "Grootste landdier?", a: "Afrikaanse Olifant" },
+                { q: "Kan een varken omhoog kijken?", a: "Nee" },
+                { q: "Hoeveel uur slaapt een leeuw?", a: "20 uur" },
+                { q: "Welk dier leeft het langst?", a: "Noordkromp (Schelpdier) / Groenlandse haai" },
+                { q: "Heeft een slang oren?", a: "Nee (inwendig)" },
+                { q: "Grootste vogelspanwijdte?", a: "Albatros" },
+                { q: "Giftigste slang?", a: "Inland Taipan" },
+                { q: "Welk dier lacht?", a: "Hyena" },
+                { q: "Hoe heet een groep kraaien?", a: "Murder" },
+                { q: "Welk dier wordt nooit ziek?", a: "Haai (zelden)" },
+                { q: "Wat is de hoorn van een neushoorn?", a: "Samengeklit haar (Keratine)" },
+                { q: "Welk dier doodt de meeste mensen?", a: "Mug" }
+            ]
+        }
+    };
+
+    let players = []; 
+    let deck = [];
+    let currentCard = {};
+    let roundIndex = 0;
+    let currentDifficulty = 'easy'; // Standaard niveau
+    
+    /* ================= SETUP LOGICA ================= */
+    
+    function initCategories() {
+        const list = document.getElementById('categoryList');
+        list.innerHTML = '';
+        for (let key in categories) {
+            let div = document.createElement('div');
+            div.className = 'list-item selected';
+            div.innerHTML = `<span>${categories[key].name}</span>`;
+            div.dataset.key = key;
+            div.onclick = function() {
+                this.classList.toggle('selected');
+            };
+            list.appendChild(div);
+        }
+    }
+
+    // Nieuwe functie voor moeilijkheid
+    function setDifficulty(level) {
+        currentDifficulty = level;
+        // Update knoppen visueel
+        document.getElementById('btn-easy').classList.remove('selected');
+        document.getElementById('btn-hard').classList.remove('selected');
+        
+        if(level === 'easy') document.getElementById('btn-easy').classList.add('selected');
+        else document.getElementById('btn-hard').classList.add('selected');
+    }
+
+    function addPlayer() {
+        const input = document.getElementById('playerNameInput');
+        const name = input.value.trim();
+        if (name) {
+            players.push({ name: name, active: true });
+            renderPlayers();
+            input.value = '';
+        }
+    }
+
+    function renderPlayers() {
+        const list = document.getElementById('playerList');
+        list.innerHTML = '';
+        players.forEach((p, index) => {
+            let div = document.createElement('div');
+            div.className = 'list-item ' + (p.active ? 'selected' : '');
+            div.innerText = p.name;
+            div.onclick = () => {
+                players[index].active = !players[index].active;
+                renderPlayers();
+            };
+            list.appendChild(div);
+        });
+    }
+
+    function toggleAllCats(state) {
+        const items = document.querySelectorAll('#categoryList .list-item');
+        items.forEach(item => {
+            if(state) item.classList.add('selected');
+            else item.classList.remove('selected');
+        });
+    }
+
+    /* ================= GAME LOGICA ================= */
+
+    function startGame() {
+        const activePlayers = players.filter(p => p.active);
+        if (activePlayers.length < 2) {
+            alert("Je hebt minimaal 2 actieve spelers nodig!");
+            return;
+        }
+
+        deck = [];
+        const selectedCats = document.querySelectorAll('#categoryList .list-item.selected');
+        if (selectedCats.length === 0) {
+            alert("Kies minimaal 1 categorie!");
+            return;
+        }
+
+        selectedCats.forEach(item => {
+            const key = item.dataset.key;
+            // HIER IS DE WIJZIGING: We pakken nu de vragen op basis van currentDifficulty
+            const questions = categories[key][currentDifficulty]; 
+            
+            // Map de categorie naam erbij
+            const cards = questions.map(q => ({...q, catName: categories[key].name}));
+            deck = deck.concat(cards);
+        });
+
+        deck.sort(() => Math.random() - 0.5);
+        roundIndex = 0;
+        nextRound();
+    }
+
+    function nextRound() {
+        const canvas = document.getElementById('confetti-canvas');
+        if(canvas) { const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        document.querySelector('.container').classList.remove('fade-in');
+        void document.querySelector('.container').offsetWidth; 
+        document.querySelector('.container').classList.add('fade-in');
+
+        if (deck.length === 0) {
+            alert("De vragen zijn op! Tijd voor warme chocomel.");
+            location.reload();
+            return;
+        }
+
+        const activePlayers = players.filter(p => p.active);
+        const guesserIndex = roundIndex % activePlayers.length;
+        const guesser = activePlayers[guesserIndex];
+
+        let potentialTruthTellers = activePlayers.filter((p, i) => i !== guesserIndex);
+        let truthTeller = potentialTruthTellers[Math.floor(Math.random() * potentialTruthTellers.length)];
+
+        currentCard = deck.pop();
+        
+        document.getElementById('currentGuesserName').innerText = guesser.name;
+        document.getElementById('currentGuesserName2').innerText = guesser.name;
+        
+        document.getElementById('currentTruthTeller').innerText = truthTeller.name;
+        document.getElementById('truthTellerNameSmall').innerText = truthTeller.name;
+
+        document.getElementById('secretQuestion').innerText = currentCard.q;
+        document.getElementById('secretAnswer').innerText = currentCard.a;
+        document.getElementById('catTagSecret').innerText = currentCard.catName;
+
+        document.getElementById('publicQuestion').innerText = currentCard.q;
+        document.getElementById('finalAnswer').innerText = currentCard.a;
+        document.getElementById('catTagPublic').innerText = currentCard.catName;
+
+        showScreen('screen-roles');
+        roundIndex++;
+    }
+
+    function showSecret() { showScreen('screen-secret'); }
+    function startGuessing() { showScreen('screen-guessing'); }
+    
+    function reveal() { 
+        showScreen('screen-result'); 
+        fireConfetti();
+    }
+
+    function showScreen(id) {
+        const screens = ['screen-setup', 'screen-roles', 'screen-secret', 'screen-guessing', 'screen-result'];
+        screens.forEach(s => document.getElementById(s).classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+        document.querySelector('.container').classList.add('fade-in');
+    }
+
+    /* ================= VISUALS ================= */
+    
+    function createSnow() {
+        for(let i=0; i<40; i++) {
+            let snow = document.createElement('div');
+            snow.className = 'snowflake';
+            snow.innerHTML = '❄';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.animationDuration = (Math.random() * 5 + 3) + 's'; 
+            snow.style.opacity = Math.random() * 0.7;
+            snow.style.fontSize = (Math.random() * 15 + 8) + 'px';
+            document.body.appendChild(snow);
+        }
+    }
+    createSnow();
+    initCategories();
+
+    function fireConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let pieces = [];
+        const colors = ['#d42426', '#165b33', '#f8b229', '#ffffff', '#a8781a'];
+
+        for(let i=0; i<250; i++) {
+            pieces.push({
+                x: canvas.width / 2, y: canvas.height / 2, w: Math.random() * 12 + 5, h: Math.random() * 12 + 5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                vx: (Math.random() - 0.5) * 30, vy: (Math.random() - 0.5) * 30, grav: 0.2,
+                rot: Math.random() * 360, rotSpeed: (Math.random() - 0.5) * 10
+            });
+        }
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pieces = pieces.filter(p => p.y < canvas.height + 50);
+            pieces.forEach((p) => {
+                p.x += p.vx; p.y += p.vy; p.vy += p.grav; p.vx *= 0.97; p.rot += p.rotSpeed;
+                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI / 180);
+                ctx.fillStyle = p.color; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.restore();
+            });
+            if(pieces.length > 0) requestAnimationFrame(update);
+            else ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        update();
+    }
+</script>
+</body>
+</html>
